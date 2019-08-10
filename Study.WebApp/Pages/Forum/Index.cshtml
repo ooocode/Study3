@@ -1,0 +1,177 @@
+﻿@*@page "{ClassificationId?}/{PageIndex?}"*@
+
+@page
+
+@{
+    ViewData["Title"] = "博客主页";
+}
+
+@functions{
+    // [FromRoute(Name = "ClassificationId")]
+    public string ClassificationId { get; set; }
+
+
+    public const int TakeCount = 10;
+
+    //[FromRoute(Name = "PageIndex")]
+    public int PageIndex { get; set; }
+
+    public string authorId = null;
+
+    public void OnGet(string ClassificationId, int PageIndex, string authorId)
+    {
+        this.ClassificationId = ClassificationId;
+        this.PageIndex = PageIndex;
+        this.authorId = authorId;
+    }
+
+
+    //删除文章
+    public async Task OnPostAsync(string articalId)
+    {
+        if (!string.IsNullOrEmpty(articalId))
+        {
+            var isMyArtical = await ArticalService.GetArticals()
+                .AnyAsync(e => e.Id == articalId && e.UserId == UserManager.GetUserId(User));
+            if (isMyArtical)
+            {
+                await ArticalService.DeleteArticalAsync(articalId);
+            }
+        }
+    }
+}
+
+@{
+    string sql = null;
+    if (string.IsNullOrEmpty(ClassificationId) && string.IsNullOrEmpty(authorId))
+    {
+        sql = "select * from Articals";
+    }
+    else if (!string.IsNullOrEmpty(ClassificationId) && !string.IsNullOrEmpty(authorId))
+    {
+        sql = $"select * from Articals where ClassificationId='{ClassificationId}' and UserId='{authorId}'";
+    }
+    else if (string.IsNullOrEmpty(ClassificationId) && !string.IsNullOrEmpty(authorId))
+    {
+        sql = $"select * from Articals where UserId='{authorId}'";
+    }
+    else if (!string.IsNullOrEmpty(ClassificationId) && string.IsNullOrEmpty(authorId))
+    {
+        sql = $"select * from Articals where ClassificationId='{ClassificationId}'";
+    }
+
+
+    //文章
+    IQueryable<ArticalDto> articals = ArticalService.GetArticals()
+        .FromSql(sql)
+        .OrderByDescending(e => e.PublishTime)
+        .Skip(PageIndex * TakeCount)
+        .Take(TakeCount);
+
+
+    //访问量最多的文章
+    IQueryable<ArticalDto> mostVisitArtical = mostVisitArtical = ArticalService.GetArticals()
+        .FromSql(sql)
+        .OrderByDescending(e => e.VisitCount)
+        .Take(5);
+
+    //所有文章的数量
+    int articalCount = await articals.CountAsync();
+
+
+    //所有文章页数
+    int pages = articalCount % TakeCount == 0 ? (articalCount / TakeCount) : ((articalCount / TakeCount) + 1);
+
+
+    string curUserId = UserManager.GetUserId(User);
+
+    <div class="row">
+        <div class="col-lg-10 col-xl-8">
+            <div style="margin:0 auto 30px;">
+                <ul class="list-group list-group-flush">
+                    @foreach (var a in articals)
+                    {
+                        var user = await UserManager.FindByIdAsync(a.UserId);
+
+                        <li class="list-group-item">
+                            <a asp-page="ArticalDetail" asp-route-ArticalId="@a.Id" style="font-size:20px;color:#222222">@a.Title</a>
+                            <p style="font-size:14px;color:#777777">
+                                <span>
+                                    @{ var path = $"https://{HttpContext.Request.Host.Value}/UploadFiles/" + user.Photo;}
+                                    <img src="@path" class="img-fluid rounded-circle" style="width:18px;height:18px" />
+                                </span>
+                                <a class="ml-2" href="/Forum/Index?authorId=@a.UserId">@user.Name</a>
+                                <span class="ml-2">@DateTimeFormat.DateStringFromNow(a.PublishTime)</span>
+                                <span class="ml-2">评论&nbsp;@(await ArticalService.GetArticalComments(a.Id).CountAsync())</span>
+                                @{ var grop = await ArticalService.GetArticalClassificationByIdAsync(a.ClassificationId);}
+                                <span class="ml-2"><a href="/Forum/Index?ClassificationId=@a.ClassificationId">@grop.Name</a> </span>
+                            </p>
+
+                            @if (!string.IsNullOrEmpty(curUserId) && curUserId == a.UserId)
+                            {
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <a asp-page="/Forum/UpdateArtical" asp-route-Id="@a.Id" class="btn btn-sm btn-primary">修改</a>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <form method="post">
+                                            <input type="hidden" name="articalId" value="@a.Id" />
+                                            <input type="submit" value="删除" class="btn btn-sm btn-danger" />
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                        </li>
+                    }
+                </ul>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item">
+                            <a class="page-link" href="/Forum/Index?ClassificationId=@ClassificationId&PageIndex=0">首页</a>
+                        </li>
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="/Forum/Index?ClassificationId=@ClassificationId&PageIndex=@(PageIndex - 1 < 0 ? 0 : (PageIndex - 1))">
+                                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                            </a>
+                        </li>
+
+                        @for (int i = PageIndex; i < (PageIndex + 4) && i < pages; i++)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="/Forum/Index?ClassificationId=@ClassificationId&PageIndex=@i">@i</a>
+                            </li>
+                        }
+
+
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="/Forum/Index?ClassificationId=@ClassificationId&PageIndex=@(PageIndex+1 >= pages  ? PageIndex : (PageIndex + 1))">
+                                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                            </a>
+                        </li>
+
+                        <li class="page-item">
+                            <a class="page-link" href="/Forum/Index?ClassificationId=@ClassificationId&PageIndex=@(pages-1)">
+                                尾页
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+
+        <div class="col-lg-2 col-xl-4">
+            <h3>浏览最多</h3>
+            @foreach (var a in mostVisitArtical)
+            {
+                <a asp-page="ArticalDetail" asp-route-ArticalId="@a.Id" style="color:#222222">@a.Title</a>
+                <hr />
+            }
+        </div>
+    </div>
+}

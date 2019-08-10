@@ -1,0 +1,8 @@
+Microsoft.EntityFrameworkCore.Tools
+
+
+Add-Migration InitialCreate
+Update-Database
+
+
+apt install libgdiplus   epplus ÔÚlinuxÉÏ³ö´í

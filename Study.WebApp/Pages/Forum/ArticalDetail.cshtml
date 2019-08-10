@@ -1,0 +1,208 @@
+﻿@page "{ArticalId}"
+
+@functions{
+    [FromRoute(Name = "ArticalId")]
+    public string ArticalId { get; set; }
+
+
+    /// <summary>
+    /// 添加文章评论模型
+    /// </summary>
+    [BindProperty]
+    public AddArticalCommentDto AddArticalCommentDto { get; set; }
+
+
+    public async Task<IActionResult> OnGetAsync()
+    {
+        var exist = await ArticalService.GetArticals().AnyAsync(e => e.Id == ArticalId);
+        if (!exist)
+        {
+            return NotFound();
+        }
+
+        return Page();
+    }
+
+
+    /// <summary>
+    /// 添加评论
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid || !SignInManager.IsSignedIn(User))
+        {
+            return Page();
+        }
+
+        var curUserId = UserManager.GetUserId(User);
+        bool isRunning = Cache.Get<bool>($"{curUserId}AddArticalCommentAsync");
+        if (isRunning)
+        {
+            ModelState.AddModelError("", "不要重复提交，两次评论的时间间隔最短为60秒");
+            return Page();
+        }
+
+        Cache.Set($"{curUserId}AddArticalCommentAsync", true, TimeSpan.FromSeconds(60));
+
+
+        var respone = await ArticalService.AddArticalCommentAsync(AddArticalCommentDto);
+        if (!respone.IsOk)
+        {
+            ModelState.AddModelError("", respone.ErrorMessage);
+        }
+        else
+        {
+            return RedirectToPage();
+        }
+        return Page();
+    }
+}
+
+@{
+    ArticalDto Artical = await ArticalService.GetArticalByIdAsync(ArticalId);
+    IdentityUserEx ArticalAuthorInfo;
+    ArticalClassificationDto ArticalClassificationInfo;
+    IQueryable<ArticalCommentDto> ArticalComments;
+    IQueryable<ArticalDto> AuthorOtherArticals;
+    bool IsMyArtical = false;
+
+
+    //阅读量+1
+    await ArticalService.UpdateArticalAsync(ArticalId, new UpdateArticalDto
+    {
+        ArticalId = ArticalId,
+        VisitCount = Artical.VisitCount + 1,
+        ClassificationId = Artical.ClassificationId,
+        Content = Artical.Content,
+        Title = Artical.Title
+    });
+
+
+    ///文章的作者信息
+    ArticalAuthorInfo = await UserManager.FindByIdAsync(Artical.UserId);
+
+    //文章分类信息
+    ArticalClassificationInfo = await ArticalService.GetArticalClassificationByIdAsync(Artical.ClassificationId);
+
+    ///是否是我的文章
+    if (UserManager.GetUserId(User) == Artical.UserId)
+    {
+        IsMyArtical = true;
+    }
+
+    //评论列表
+    ArticalComments = ArticalService.GetArticalComments(Artical.Id).OrderByDescending(e => e.CommentTime);
+
+
+    //获取作者其他文章
+    AuthorOtherArticals = ArticalService.GetArticals()
+        .Where(e => e.UserId == Artical.UserId && e.Id != ArticalId)
+        .OrderByDescending(e => e.PublishTime)
+        .Take(5);
+
+}
+
+@{
+    ViewData["Title"] = Artical.Title;
+}
+
+
+<div class="row">
+    @*<div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">*@
+    <div class="col-lg-10 col-xl-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Forum/Index">主页</a></li>
+                <li class="breadcrumb-item">
+                    <a href="/Forum/Index?ClassificationId=@ArticalClassificationInfo.Id">
+                        @ArticalClassificationInfo.Name
+                    </a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="/Forum/Index?authorId=@ArticalAuthorInfo.Id">
+                        @ArticalAuthorInfo.Name
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">正文</li>
+            </ol>
+        </nav>
+
+
+        <div style="margin:0 auto 30px;">
+            <p class="text-center">
+                <h3>@Artical.Title</h3>
+
+                <div class="row">
+                    <div class="col-auto">
+                        @{var path = $"https://{HttpContext.Request.Host.Value}/UploadFiles/" + ArticalAuthorInfo.Photo;}
+                        <img src="@path" class="img-fluid rounded-circle" style="width:48px;height:48px" />
+                    </div>
+
+                    <div class="col-auto">
+                        <span>@ArticalAuthorInfo.Name</span><br />
+                        <span style="color:rgb(101,119,134);font-size:12px">
+                            @DateTimeFormat.ToLocalString(Artical.PublishTime)
+                        </span>
+                        <span class="ml-2" style="color:rgb(101,119,134);font-size:12px">评论&nbsp;@(await ArticalComments.CountAsync())</span>
+                        @if (IsMyArtical)
+                        {
+                            <span class="ml-2"> <a asp-page="/Forum/UpdateArtical" asp-route-Id="@Artical.Id" class="btn btn-sm btn-primary">修改</a></span>
+                        }
+                    </div>
+                </div>
+                <hr />
+                @Html.Raw(Artical.Content)
+            </p>
+
+            <h3>评论区</h3>
+            @if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                <form method="post">
+                    <input type="hidden" asp-for="AddArticalCommentDto.ArticalId" value="@Artical.Id" />
+                    <input type="hidden" asp-for="AddArticalCommentDto.CommenterId" value="@UserManager.GetUserId(User)" />
+                    <textarea class="form-control" asp-for="AddArticalCommentDto.CommentContent"></textarea>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="submit" class="btn btn-primary" value="评论" />
+                </form>
+            }
+            else
+            {
+                <textarea class="form-control">
+                    登录后发表评论
+                </textarea>
+                <a class="btn btn-primary" href="/Account/Login">登录</a>
+            }
+
+
+            @{
+                foreach (var c in ArticalComments)
+                {
+                    var commemter = await UserManager.FindByIdAsync(c.CommenterId);
+
+                    <p style="font-size:14px;color:#777777">
+                        <span>
+                            @{var imgPath = $"https://{HttpContext.Request.Host.Value}/UploadFiles/" + commemter.Photo;}
+                            <img src="@imgPath" class="img-fluid rounded-circle" style="width:18px;height:18px" />
+
+                        </span>
+                        <span class="ml-2">@commemter.Name</span>
+                        <span class="ml-2">@DateTimeFormat.DateStringFromNow(c.CommentTime)</span>
+                    </p>
+                    <p style="margin-left:30px">@Html.Raw(c.CommentContent)</p>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="col-lg-2 col-xl-4">
+        <h3>作者最新</h3>
+        @foreach (var a in AuthorOtherArticals)
+        {
+            <a asp-page="ArticalDetail" asp-route-ArticalId="@a.Id" style="color:#222222">@a.Title</a>
+            <hr />
+        }
+    </div>
+</div>
+
+

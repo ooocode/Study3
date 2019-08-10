@@ -1,0 +1,140 @@
+﻿@page
+@model Study.WebApp.Pages.Account.UpdateInfoModel
+@{
+    ViewData["Title"] = "修改个人信息";
+}
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    Model.updateModel = new UpdateInfoModel.UpdateModel
+    {
+        Desc = user.Desc,
+        Name = user.Name,
+        Sex = user.Sex
+    };
+}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">修改信息</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-page-handler="UploadPhoto" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="exampleFormControlFile1">头像</label>
+                        <input type="file" class="form-control-file file" name="file" id="exampleFormControlFile1">
+                    </div>
+                </form>
+
+                <form asp-page-handler="Update" method="post">
+                    <div asp-validation-summary="All" class="text-dark"></div>
+
+
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input class="form-control" asp-for="updateModel.Name" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>性别</label>
+                        <select asp-for="updateModel.Sex" class="form-control">
+                            <option value="0">男</option>
+                            <option value="1">女</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>个人简介</label>
+                        <textarea class="form-control" asp-for="updateModel.Desc"></textarea>
+                    </div>
+
+                    <input type="submit" value="更新" class="btn btn-info" />
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">基本信息</div>
+    <div class="card-body">
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td style="width:100px">
+                        @{
+                            var path = $"https://{HttpContext.Request.Host.Value}/UploadFiles/" + user.Photo;
+                            <img src="@path" class="img-fluid rounded-circle" style="width:80px;height:80px" />
+                        }
+                    </td>
+                    <td style="width:60%">
+                        <p style="color:#666666;font-size:14px">
+                            <span style="color:#222222;font-size:20px">@user.Name</span><br />
+                            @user.Desc
+                        </p>
+
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            修改信息
+                        </button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>ID</td>
+                    <td>@user.Id</td>
+                </tr>
+
+                <tr>
+                    <td>性别</td>
+                    <td>@user.Name</td>
+                </tr>
+
+                <tr>
+                    <td>邮箱</td>
+                    <td>@user.Email</td>
+                </tr>
+
+                <tr>
+                    <td>性别</td>
+                    @{ var sex = user.Sex == 0 ? "男" : "女";}
+                    <td>@sex</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function clickShowForm() {
+            var state = $('#formcard').css('display')
+            if (state == 'none') {
+                console.log('none')
+                $('#formcard').css('display', 'normal')
+            } else {
+                onsole.log('normal')
+                $('#formcard').css('display', 'none')
+            }
+
+        }
+        $(".file").fileinput({
+            language: 'zh',
+            maxFileSize: 10000000 // 10 MB
+        });
+    </script>
+}

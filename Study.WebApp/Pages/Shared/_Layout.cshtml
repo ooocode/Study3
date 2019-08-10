@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="baidu-site-verification" content="drlbIWRgI6" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - 学习坊</title>
+    <meta name="keywords" content="学习坊,编程技术,博客,数据库,数据结构与算法,AspNetCore" />
+    <meta name="description" content="学习坊是专注于技术的博客论坛，每天更新系列技术文章" />
+    <partial name="_CssPartial" />
+</head>
+<body>
+    <partial name="_NavPartial" />
+    <div class="container mt-2">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <partial name="_FooterPartial" />
+
+
+    <partial name="_Script" />
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

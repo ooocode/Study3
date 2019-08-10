@@ -1,0 +1,30 @@
+﻿@page
+@{
+    ViewData["Title"] = "主页";
+}
+
+<div class="jumbotron">
+    <h1 class="display-4">学习坊博客</h1>
+    <p class="lead">专注于技术研究的博客</p>
+    <hr class="my-4">
+    <p>学习无处不在</p>
+    <a class="btn btn-primary btn-lg" href="/Forum/Index" role="button">了解更多</a>
+</div>
+
+@functions{
+    //public void OnGet(/*[FromServices] Study.Database.AppDatabaseContext db*/)
+    //{
+
+    //    for (int i = 0; i < 300; i++)
+    //    {
+    //        Thread t = new Thread((m) =>
+    //        {
+    //            dynamic mm = m as dynamic;
+    //            MovieParser parser = new MovieParser(/*mm.database*/);
+    //            parser.ThreadFunc(mm.index * 1000, mm.index * 1000 + 999).Wait();
+    //        });
+
+    //        t.Start(new { index = i/*, database = db */});
+    //    }
+    //}
+}

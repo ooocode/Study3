@@ -1,0 +1,23 @@
+https://weiban.mycourse.cn/pharos/usercourse/finish.do?callback=jQuery16408611744967587469_1560046866173&userCourseId=37ad43f0-5708-49af-b94f-faebe274bed5&tenantCode=53000002&_=1560046964056
+
+jQuery16408611744967587469_1560046866173({"msg":"ok","code":"0","detailCode":"0"})
+
+_=1560046964056 Ê±¼ä´Á
+tenantCode=53000002  µØÖ·Âð
+
+
+https://weiban.mycourse.cn/pharos/usercourse/finish.do?callback=jQuery16408611744967587469_1560046866173&userCourseId=489d5510-31a2-4150-b811-7b7a7c6ad15f&tenantCode=53000002&_=1560046964056
+
+
+
+function getParam(paramName) { 
+    paramValue = "", isFound = !1; 
+    if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) { 
+        arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0; 
+        while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++ 
+    } 
+    return paramValue == "" && (paramValue = null), paramValue 
+} 
+$.get('https://weiban.mycourse.cn/pharos/usercourse/finish.do?callback=jQuery16408611744967587469_1560046866173&userCourseId='+getParam('userCourseId')+'&tenantCode=53000002&_=1560046964056',function(e){
+console.log(e)
+})

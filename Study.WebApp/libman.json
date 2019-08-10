@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap-fileinput@5.0.4",
+      "destination": "wwwroot/bootstrap-fileinput/"
+    },
+    {
+      "library": "summernote@0.8.12",
+      "destination": "wwwroot/summernote/"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+﻿@page "{Code:int}"
+@{
+    ViewData["Title"] = Code;
+}
+
+@functions{
+    [FromRoute(Name = "Code")]
+    public int Code { get; set; }
+}
+
+@if (Code == 404)
+{
+    <img src="~/images/404.png" class="img-fluid" asp-append-version="true" />
+    <p>很遗憾，您查找的资源不存在......</p>
+}
+else
+{
+    <h1>Http错误状态码 @Code</h1>
+}
+

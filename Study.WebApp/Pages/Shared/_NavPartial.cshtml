@@ -1,0 +1,72 @@
+﻿<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-top">
+        <div class="container">
+            <a class="navbar-brand" asp-area="" asp-page="/Index">
+                <img src="~/logo.png" class="img-fluid" asp-append-version="true" style="width:50px" />
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <partial name="_LoginPartial" />
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-page="/Index">主页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-page="/Forum/Index">博客</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+
+
+<div class="border-bottom box-shadow" style="margin-top:70px">
+    <div class="container">
+        <ul class="nav ">
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/Forum/Index">最新</a>
+            </li>
+
+
+            @foreach (var c in (await ArticalService.GetArticalClassificationsAsync()))
+            {
+                var query = Context.Request.Query["ClassificationId"];
+                var className = query == c.Id ? "border-bottom border-primary" : "";
+
+                <li class="nav-item">
+                    <a class="nav-link text-dark @className" href="/Forum/Index?ClassificationId=@c.Id">@c.Name</a>
+                </li>
+            }
+
+            @if (SignInManager.IsSignedIn(User))
+            {
+                @*<li class="nav-item">
+                        <a class="nav-link text-dark" asp-page="/Forum/Movie">电影</a>
+                    </li>*@
+
+                <li class="nav-item">
+                    @{ var curUserId = UserManager.GetUserId(User); }
+                    <a class="nav-link text-dark" href="/Forum/Index?authorId=@curUserId">我的文章</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-page="/Forum/PublishArtical">写文章</a>
+                </li>
+
+                @*if (roleInfo.AllowOperateArticalClassification)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-page="/Forum/ArticalClassificationManage">分类管理</a>
+                    </li>
+                }*@
+            }
+        </ul>
+    </div>
+</div>
