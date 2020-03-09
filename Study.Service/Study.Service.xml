@@ -1,0 +1,1365 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Study.Service</name>
+    </assembly>
+    <members>
+        <member name="T:Study.Services.ArticalService.ArticlesService">
+            <summary>
+            文章服务类
+            </summary>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.AddArticalClassificationAsync(Study.Services.ArticalService.Req.AddArticalClassificationDto)">
+            <summary>
+            添加文章分类
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.GetArticalClassificationsAsync">
+            <summary>
+            获取所有分类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.GetArticalClassificationByIdAsync(System.Int64)">
+            <summary>
+            通过分类id获取分类信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.UpdateArticalClassificationAsync(System.Int64,Study.Services.ArticalService.Req.UpdateArticalClassificationDto)">
+            <summary>
+            更新文章分类
+            </summary>
+            <param name="id"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.DeleteArticalClassificationAsync(System.Int64)">
+            <summary>
+            删除文章分类
+            </summary>
+            <param name="id">分类id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.AddArticalAsync(Study.Services.ArticalService.Req.AddArticalDto)">
+            <summary>
+            添加文章
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.GetArticlesAsync(System.Func{System.Linq.IQueryable{Study.Services.ArticalService.Res.ArticalDto},System.Linq.IQueryable{Study.Services.ArticalService.Res.ArticalDto}},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            获取文章集合(不包含内容)
+            </summary>
+            <param name="ClassificationId">分类id</param>
+            <param name="skip">跳过N条</param>
+            <param name="take">取N条</param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.ArticleExistAsync(System.Linq.Expressions.Expression{System.Func{Study.Services.ArticalService.Res.ArticalDto,System.Boolean}})">
+            <summary>
+            根据条件判断文章是否存在
+            </summary>
+            <param name="expression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.ArticleCountAsync(System.Linq.Expressions.Expression{System.Func{Study.Services.ArticalService.Res.ArticalDto,System.Boolean}})">
+            <summary>
+            根据条件获取文章数量
+            </summary>
+            <param name="expression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.GetArticalByIdAsync(System.Int64)">
+            <summary>
+            获取一篇文章
+            </summary>
+            <param name="articalId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.SetArticleTopAsync(System.Int64,System.Boolean)">
+            <summary>
+            设置文章置顶
+            </summary>
+            <param name="articalId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.UpdateArticalAsync(System.Int64,Study.Services.ArticalService.Req.UpdateArticalDto)">
+            <summary>
+            更新一篇文章
+            </summary>
+            <param name="id">文章id</param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.DeleteArticalAsync(System.Int64)">
+            <summary>
+            删除一篇文章
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.AddArticalCommentAsync(Study.Services.ArticalService.Req.AddArticalCommentDto)">
+            <summary>
+            添加文章评论
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.GetArticalComments(System.Int64)">
+            <summary>
+            获取一篇文章评论
+            </summary>
+            <param name="id">文章id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.ArticlesService.DeleteArticalCommentAsync(System.Int64)">
+            <summary>
+            删除文章评论
+            </summary>
+        </member>
+        <member name="T:Study.Services.ArticalService.IArticalService">
+            <summary>
+            文章服务接口 自动注入
+            </summary>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.AddArticalClassificationAsync(Study.Services.ArticalService.Req.AddArticalClassificationDto)">
+            <summary>
+            添加文章分类
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.GetArticalClassificationsAsync">
+            <summary>
+            获取文章分类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.GetArticalClassificationByIdAsync(System.Int64)">
+            <summary>
+            通过分类id获取分类信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.UpdateArticalClassificationAsync(System.Int64,Study.Services.ArticalService.Req.UpdateArticalClassificationDto)">
+            <summary>
+            更新文章分类
+            </summary>
+            <param name="id"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.DeleteArticalClassificationAsync(System.Int64)">
+            <summary>
+            删除文章分类
+            </summary>
+            <param name="id">分类id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.AddArticalAsync(Study.Services.ArticalService.Req.AddArticalDto)">
+            <summary>
+            添加文章
+            </summary>
+            <param name="dto"></param>
+            <returns>返回文章id</returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.GetArticlesAsync(System.Func{System.Linq.IQueryable{Study.Services.ArticalService.Res.ArticalDto},System.Linq.IQueryable{Study.Services.ArticalService.Res.ArticalDto}},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            获取文章集合(不包含内容)
+            </summary>
+            <param name="ClassificationId">分类id</param>
+            <param name="skip">跳过N条</param>
+            <param name="take">取N条</param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.ArticleExistAsync(System.Linq.Expressions.Expression{System.Func{Study.Services.ArticalService.Res.ArticalDto,System.Boolean}})">
+            <summary>
+            根据条件判断文章是否存在
+            </summary>
+            <param name="expression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.ArticleCountAsync(System.Linq.Expressions.Expression{System.Func{Study.Services.ArticalService.Res.ArticalDto,System.Boolean}})">
+            <summary>
+            根据条件获取文章数量
+            </summary>
+            <param name="expression"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.GetArticalByIdAsync(System.Int64)">
+            <summary>
+            获取一篇文章（包含内容）
+            </summary>
+            <param name="articalId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.DeleteArticalAsync(System.Int64)">
+            <summary>
+            删除一篇文章
+            </summary>
+            <param name="id">文章id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.UpdateArticalAsync(System.Int64,Study.Services.ArticalService.Req.UpdateArticalDto)">
+            <summary>
+            更新文章
+            </summary>
+            <param name="id"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.SetArticleTopAsync(System.Int64,System.Boolean)">
+            <summary>
+            设置文章置顶
+            </summary>
+            <param name="articalId"></param>
+            <param name="isSetTop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.AddArticalCommentAsync(Study.Services.ArticalService.Req.AddArticalCommentDto)">
+            <summary>
+            添加文章评论
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.GetArticalComments(System.Int64)">
+            <summary>
+            获取一篇文章所有评论
+            </summary>
+            <param name="articalId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.ArticalService.IArticalService.DeleteArticalCommentAsync(System.Int64)">
+            <summary>
+            删除文章评论
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.AddArticalClassificationDto.Name">
+             <summary>
+            分类名称
+             </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.AddArticalCommentDto.ArticalId">
+            <summary>
+            文章id
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.AddArticalCommentDto.CommenterId">
+            <summary>
+            评论者id
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.AddArticalCommentDto.CommentContent">
+            <summary>
+            评论内容
+            </summary>
+        </member>
+        <member name="T:Study.Services.ArticalService.Req.AddArticalDto">
+            <summary>
+            添加文章
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.AddArticalDto.UserId">
+            <summary>
+            作者Id
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.AddArticalDto.ClassificationId">
+             <summary>
+            分类Id
+             </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.AddArticalDto.Title">
+            <summary>
+            文章标题
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.AddArticalDto.Content">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="T:Study.Services.ArticalService.Req.UpdateArticalClassificationDto">
+            <summary>
+            更新文章分类
+            </summary>
+        </member>
+        <member name="T:Study.Services.ArticalService.Req.UpdateArticalDto">
+            <summary>
+            更新文章
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.UpdateArticalDto.ArticalId">
+            <summary>
+            文章id
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.UpdateArticalDto.ClassificationId">
+             <summary>
+            分类Id
+             </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.UpdateArticalDto.Title">
+            <summary>
+            文章标题
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.UpdateArticalDto.Content">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Req.UpdateArticalDto.VisitCount">
+            <summary>
+            访问量
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalClassificationDto.Id">
+            <summary>
+            分类ID
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalClassificationDto.Name">
+             <summary>
+            分类名称
+             </summary>
+        </member>
+        <member name="T:Study.Services.ArticalService.Res.ArticalCommentDto">
+            <summary>
+            文章评论
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalCommentDto.Id">
+            <summary>
+            评论Id
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalCommentDto.ArticalId">
+            <summary>
+            文章ID
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalCommentDto.CommenterId">
+            <summary>
+            评论者id
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalCommentDto.CommentContent">
+            <summary>
+            评论内容
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalCommentDto.CommentTime">
+            <summary>
+            评论时间
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.Id">
+            <summary>
+            文章Id
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.ClassificationId">
+             <summary>
+            分类Id
+             </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.UserId">
+            <summary>
+            作者Id
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.Title">
+            <summary>
+            文章标题
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.Content">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.PublishTime">
+            <summary>
+            发布时间
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.VisitCount">
+            <summary>
+            访问量
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.IsSetTop">
+            <summary>
+            文章是否置顶
+            </summary>
+        </member>
+        <member name="P:Study.Services.ArticalService.Res.ArticalDto.SetTopDateTime">
+            <summary>
+            置顶时间
+            </summary>
+        </member>
+        <member name="M:Study.Services.CourseService.CourseService.GetCourses">
+            <summary>
+            获取所有课程
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.CourseService.CourseService.GetCourseByIdAsync(System.String)">
+            <summary>
+            获取课程
+            </summary>
+            <param name="courseId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.CourseService.CourseService.AddCourseAsync(Study.Service.CourseService.Req.AddCourseDto)">
+            <summary>
+            添加课程
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.CourseService.CourseService.UpdateCourseAsync(System.String,Study.Service.CourseService.Req.UpdateCourseDto)">
+            <summary>
+            更新课程
+            </summary>
+            <param name="courseId"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.CourseService.CourseService.DeleteCourseAsync(System.String)">
+            <summary>
+            删除课程
+            </summary>
+            <param name="courseId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Study.Services.CourseService.ICourseService">
+            <summary>
+            课程服务接口
+            </summary>
+        </member>
+        <member name="M:Study.Services.CourseService.ICourseService.GetCourses">
+            <summary>
+            获取所有课程
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.CourseService.ICourseService.GetCourseByIdAsync(System.String)">
+            <summary>
+            获取课程
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.CourseService.ICourseService.AddCourseAsync(Study.Service.CourseService.Req.AddCourseDto)">
+            <summary>
+            添加课程
+            </summary>
+            <param name="dto"></param>
+            <returns>成功返回课程id</returns>
+        </member>
+        <member name="M:Study.Services.CourseService.ICourseService.UpdateCourseAsync(System.String,Study.Service.CourseService.Req.UpdateCourseDto)">
+            <summary>
+            更新课程
+            </summary>
+            <param name="courseId"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.CourseService.ICourseService.DeleteCourseAsync(System.String)">
+            <summary>
+            删除课程
+            </summary>
+            <param name="courseId"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Study.Services.ErrorMessages.ParseIdFaild">
+            <summary>
+            解析Id失败
+            </summary>
+        </member>
+        <member name="M:Study.Services.SignInService.ISignInService.SignInAsync(Study.Database.Entity.UserEntities.User)">
+            <summary>
+            登录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.SignInService.ISignInService.SignOutAsync">
+            <summary>
+            注销
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.SignInService.SignInService.SignInAsync(Study.Database.Entity.UserEntities.User)">
+            <summary>
+            登录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.SignInService.SignInService.SignOutAsync">
+            <summary>
+            注销
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.ITaskService.AddTeacherTaskAsync(Study.Services.TaskService.Req.AddTeacherTaskDto)">
+            <summary>
+            添加任务同时发布给学生  
+            </summary>
+            <param name="model"></param>
+            <returns>成功返回课程Id</returns>
+        </member>
+        <member name="M:Study.Services.TaskService.ITaskService.UpdateTeacherTaskAsync(System.String,System.String,Study.Service.TaskService.Req.UpdateTeacherTaskDto)">
+            <summary>
+            更新教师发布的作业
+            </summary>
+            <param name="taskId"></param>
+            <param name="teacherId"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.ITaskService.GetTeacherTasks">
+            <summary>
+            获取所有的教师发布的作业
+            </summary>
+            <param name="teacherId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.ITaskService.GetTeacherTaskByIdAsync(System.String)">
+            <summary>
+            通过id获取教师发布的作业
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.ITaskService.GetStudentTasks">
+            <summary>
+            获取所有学生的所有任务
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.ITaskService.SetStudentAnswerAsync(Study.Services.TaskService.Req.SetStudentAnswerDto)">
+            <summary>
+            学生答题
+            </summary>
+            <param name="taskId"></param>
+            <param name="taskAnswer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.ITaskService.SetStudentGradeAsync(Study.Services.TaskService.Req.SetStudentGradeDto)">
+            <summary>
+            设置学生成绩
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.ITaskService.DeleteTaskAsync(System.String,System.String)">
+            <summary>
+            删除教师任务
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.AddTeacherTaskDto.TeacherId">
+            <summary>
+            教师id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.AddTeacherTaskDto.CourseId">
+            <summary>
+            课程id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.AddTeacherTaskDto.TaskName">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.AddTeacherTaskDto.TaskContent">
+            <summary>
+            任务内容
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.AddTeacherTaskDto.TaskStartTime">
+            <summary>
+            任务开始时间
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.AddTeacherTaskDto.TaskEndTime">
+            <summary>
+            任务结束时间
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.AddTeacherTaskDto.StudentIds">
+            <summary>
+            发布给了哪些学生
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.AddTeacherTaskDto.HelperId">
+            <summary>
+            助手id（修改作业的人）
+            </summary>
+        </member>
+        <member name="T:Study.Services.TaskService.Req.SetStudentAnswerDto">
+            <summary>
+            学生答题
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.SetStudentAnswerDto.TaskId">
+            <summary>
+            作业id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.SetStudentAnswerDto.StudentId">
+            <summary>
+            学生id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.SetStudentAnswerDto.Answer">
+            <summary>
+            作业答案
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.SetStudentGradeDto.StudentId">
+            <summary>
+            学生id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.SetStudentGradeDto.TaskId">
+            <summary>
+            任务id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.SetStudentGradeDto.Grade">
+            <summary>
+            分数
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Req.SetStudentGradeDto.TeacherReply">
+            <summary>
+            教师回复
+            </summary>
+        </member>
+        <member name="T:Study.Services.TaskService.Res.StudentTaskDto">
+            <summary>
+            学生作业
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.StudentTaskDto.TaskId">
+            <summary>
+            任务ID
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.StudentTaskDto.StudentId">
+            <summary>
+            学号
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.StudentTaskDto.StudentAnswer">
+            <summary>
+            学生答案
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.StudentTaskDto.Grade">
+            <summary>
+            任务成绩
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.StudentTaskDto.DateTime">
+            <summary>
+            答题时间
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.StudentTaskDto.IsAlreadyAnswered">
+            <summary>
+            是否答题了（这个字段有点冗余啊）
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.StudentTaskDto.TeacherReply">
+            <summary>
+            教师回复信息
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.StudentTaskDto.IsTeacherModified">
+            <summary>
+            教师是否改过这份作业
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.Id">
+            <summary>
+            任务ID
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.TeacherId">
+            <summary>
+            教师id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.HelperId">
+            <summary>
+            修改作业的人id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.CourseId">
+            <summary>
+            课程id
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.TaskName">
+            <summary>
+            任务名称
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.TaskContent">
+            <summary>
+            任务内容
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.TaskWriteTime">
+            <summary>
+            任务写的时间  这个任务什么时候写的
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.TaskStartTime">
+            <summary>
+            任务开始时间
+            </summary>
+        </member>
+        <member name="P:Study.Services.TaskService.Res.TeacherTaskDto.TaskEndTime">
+            <summary>
+            任务结束时间
+            </summary>
+        </member>
+        <member name="T:Study.Services.TaskService.TaskService">
+            <summary>
+            作业服务
+            </summary>
+        </member>
+        <member name="M:Study.Services.TaskService.TaskService.AddTeacherTaskAsync(Study.Services.TaskService.Req.AddTeacherTaskDto)">
+            <summary>
+            添加任务同时发布给学生  
+            </summary>
+        </member>
+        <member name="M:Study.Services.TaskService.TaskService.UpdateTeacherTaskAsync(System.String,System.String,Study.Service.TaskService.Req.UpdateTeacherTaskDto)">
+            <summary>
+            更新教师发布的作业
+            </summary>
+            <param name="taskId"></param>
+            <param name="teacherId"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.TaskService.GetTeacherTasks">
+            <summary>
+            获取所有的教师发布的作业
+            </summary>
+            <param name="teacherId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.TaskService.GetTeacherTaskByIdAsync(System.String)">
+            <summary>
+            通过id获取教师发布的作业
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.TaskService.GetStudentTasks">
+            <summary>
+            获取所有学生的所有作业情况
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.TaskService.SetStudentAnswerAsync(Study.Services.TaskService.Req.SetStudentAnswerDto)">
+            <summary>
+            学生答题
+            </summary>
+            <param name="taskId"></param>
+            <param name="taskAnswer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.TaskService.SetStudentGradeAsync(Study.Services.TaskService.Req.SetStudentGradeDto)">
+            <summary>
+            设置学生成绩
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.TaskService.TaskService.DeleteTaskAsync(System.String,System.String)">
+            <summary>
+            删除教师任务
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.Services.UserService.IUserService.Users">
+            <summary>
+            用户表
+            </summary>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.GetCurUserId">
+            <summary>
+            获取当前用户id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.GetCurUserAsync">
+            <summary>
+            获取当前用户
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.FindByIdAsync(System.String)">
+            <summary>
+            通过Id查找用户
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.AddUserFriendAsync(System.String,System.String)">
+            <summary>
+            添加用户朋友
+            </summary>
+            <param name="friendId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.DeleteUserFriendAsync(System.String,System.String)">
+            <summary>
+            删除用户朋友
+            </summary>
+            <param name="friendId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.GetUserFriends(System.String)">
+            <summary>
+            获取用户朋友列表
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.UpdateAsync(System.String,Study.Services.UserService.Req.UpdateDto)">
+            <summary>
+            更新信息
+            </summary>
+            <param name="userId"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.UpdateProfilePhotoAsync(System.String,System.String)">
+            <summary>
+            更新头像
+            </summary>
+            <param name="userId"></param>
+            <param name="photo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.UpdatePasswordAsync(System.String,Study.Service.UserService.Req.UpdatePasswordDto)">
+            <summary>
+            修改密码
+            </summary>
+            <param name="userId"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.GetUserRoles(System.String)">
+            <summary>
+            获取用户角色所属的名称
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.IsInRoleAsync(System.String,System.String)">
+            <summary>
+            用户属于某个角色
+            </summary>
+            <param name="userId"></param>
+            <param name="roleName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.CreateAsync(Study.Database.Entity.UserEntities.User)">
+            <summary>
+            创建用户
+            </summary>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.BeginCreateAsync(System.String,System.String,System.String,System.String,System.Byte)">
+            <summary>
+            批量创建用户(学生)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.PasswordSignInAsync(System.String,System.String)">
+            <summary>
+            密码登录
+            </summary>
+            <param name="account"></param>
+            <param name="pasword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.GetSchoolClasses">
+            <summary>
+            获取学校班级
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.AddTeacherClassAsync(Study.Services.UserService.Req.AddTeacherClassDto)">
+            <summary>
+            添加教师班级
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.DeleteTeacherClassAsync(System.String,System.String)">
+            <summary>
+            删除教师班级
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.IUserService.GetTeacherClasses(System.String)">
+            <summary>
+            获取教师班级
+            </summary>
+            <param name="teacherId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.Services.UserService.Req.AddSchoolClassDto.Name">
+            <summary>
+            班级名称
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Req.AddSchoolClassDto.Desc">
+            <summary>
+            班级描述
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Req.UpdateDto.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Req.UpdateDto.PhoneNumber">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Req.UpdateDto.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Req.UpdateDto.Sex">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Req.UpdateDto.Desc">
+            <summary>
+            个人简介
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Req.UpdateDto.ClassId">
+            <summary>
+            班级id
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.Account">
+            <summary>
+            账号（是唯一的）
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.PhoneNumber">
+            <summary>
+            手机号码
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.PhoneNumberConfirmed">
+            <summary>
+            手机号码是否验证了
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.Email">
+            <summary>
+            邮箱
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.NormalizedEmail">
+            <summary>
+            归一化的邮箱（大写的邮箱）
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.EmailConfirmed">
+            <summary>
+            邮箱是否被验证了
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.AccessFailedCount">
+            <summary>
+            登录失败次数
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.LockoutEnabled">
+            <summary>
+            账号是否被锁定了（封号）
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.LockoutEnd">
+            <summary>
+            封号结束时间
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.Photo">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.Sex">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.Desc">
+            <summary>
+            个人简介
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.Res.UserDto.ClassInfo">
+            <summary>
+            班级信息
+            </summary>
+        </member>
+        <member name="P:Study.Services.UserService.UserService.Users">
+            <summary>
+            用户表
+            </summary>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.GetCurUserId">
+            <summary>
+            获取当前用户id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.GetCurUserAsync">
+            <summary>
+            获取当前用户
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.FindByIdAsync(System.String)">
+            <summary>
+            通过Id查找用户
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.GetUserRoles(System.String)">
+            <summary>
+            获取用户角色所属的名称
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.IsInRoleAsync(System.String,System.String)">
+            <summary>
+            用户属于某个角色
+            </summary>
+            <param name="userId"></param>
+            <param name="roleName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.CreateAsync(Study.Database.Entity.UserEntities.User)">
+            <summary>
+            创建用户
+            </summary>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.AddUserFriendAsync(System.String,System.String)">
+            <summary>
+            添加用户朋友
+            </summary>
+            <param name="friendId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.DeleteUserFriendAsync(System.String,System.String)">
+            <summary>
+            删除用户朋友
+            </summary>
+            <param name="friendId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.GetUserFriends(System.String)">
+            <summary>
+            获取用户朋友列表
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.UpdateAsync(System.String,Study.Services.UserService.Req.UpdateDto)">
+            <summary>
+            更新信息
+            </summary>
+            <param name="userId"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.UpdateProfilePhotoAsync(System.String,System.String)">
+            <summary>
+            更新头像
+            </summary>
+            <param name="userId"></param>
+            <param name="photo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.UpdatePasswordAsync(System.String,Study.Service.UserService.Req.UpdatePasswordDto)">
+            <summary>
+            修改密码
+            </summary>
+            <param name="userId"></param>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.BeginCreateAsync(System.String,System.String,System.String,System.String,System.Byte)">
+            <summary>
+            批量创建用户(学生)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.PasswordSignInAsync(System.String,System.String)">
+            <summary>
+            密码登录
+            </summary>
+            <param name="account"></param>
+            <param name="pasword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.GetSchoolClasses">
+            <summary>
+            获取学校班级
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.AddTeacherClassAsync(Study.Services.UserService.Req.AddTeacherClassDto)">
+            <summary>
+            添加教师班级
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.DeleteTeacherClassAsync(System.String,System.String)">
+            <summary>
+            删除教师班级
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Services.UserService.UserService.GetTeacherClasses(System.String)">
+            <summary>
+            获取教师班级
+            </summary>
+            <param name="teacherId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.Service.CourseService.Req.AddCourseDto.UserId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Req.AddCourseDto.Name">
+            <summary>
+            课程名称
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Req.AddCourseDto.Desc">
+            <summary>
+            课程描述
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Req.UpdateCourseDto.Id">
+            <summary>
+            课程id
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Req.UpdateCourseDto.UserId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Req.UpdateCourseDto.Name">
+            <summary>
+            课程名称
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Req.UpdateCourseDto.Desc">
+            <summary>
+            课程描述
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Res.CourseDto.Id">
+            <summary>
+            课程id
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Res.CourseDto.UserId">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Res.CourseDto.Name">
+            <summary>
+            课程名称
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Res.CourseDto.Desc">
+            <summary>
+            课程描述
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Res.CourseDto.AddDateTime">
+            <summary>
+            添加时间（这个课程是什么时候添加的）
+            </summary>
+        </member>
+        <member name="P:Study.Service.CourseService.Res.CourseDto.LastModifyDatetime">
+            <summary>
+            最后修改时间
+            </summary>
+        </member>
+        <member name="T:Study.Service.MovieService.IMovieService">
+            <summary>
+            视频接口
+            </summary>
+        </member>
+        <member name="M:Study.Service.MovieService.IMovieService.GetVideoTypesAsync">
+            <summary>
+            获取所有视频分类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Service.MovieService.IMovieService.GetVideoTypeByIdAsync(System.Int32)">
+            <summary>
+            通过id获取视频分类
+            </summary>
+            <param name="videoTypeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Service.MovieService.MovieService.GetVideoTypesAsync">
+            <summary>
+            获取所有视频分类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Service.MovieService.MovieService.GetVideoTypeByIdAsync(System.Int32)">
+            <summary>
+            通过id获取视频分类
+            </summary>
+            <param name="videoTypeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Service.MovieService.MovieService.DeleteMovieAsync(System.String)">
+            <summary>
+            删除电影
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Service.MovieService.MovieService.GetVideosAsync(System.Int32[],System.Int32,System.Int32)">
+            <summary>
+             分页获取视频
+            </summary>
+            <param name="typeIds">分类id数组 可以null</param>
+            <param name="skip"></param>
+            <param name="take"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Service.MovieService.MovieService.GetVideoByIdAsync(System.Int32)">
+            <summary>
+            获取视频
+            </summary>
+            <param name="videoId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Study.Service.TaskService.Req.UpdateTeacherTaskDto">
+            <summary>
+            更新教师任务
+            </summary>
+        </member>
+        <member name="P:Study.Service.TaskService.Req.UpdateTeacherTaskDto.HelperId">
+            <summary>
+            修改作业的人id
+            </summary>
+        </member>
+        <member name="P:Study.Service.TaskService.Req.UpdateTeacherTaskDto.CourseId">
+            <summary>
+            课程id
+            </summary>
+        </member>
+        <member name="P:Study.Service.TaskService.Req.UpdateTeacherTaskDto.TaskContent">
+            <summary>
+            任务内容
+            </summary>
+        </member>
+        <member name="P:Study.Service.TaskService.Req.UpdateTeacherTaskDto.TaskStartTime">
+            <summary>
+            任务开始时间
+            </summary>
+        </member>
+        <member name="P:Study.Service.TaskService.Req.UpdateTeacherTaskDto.TaskEndTime">
+            <summary>
+            任务结束时间
+            </summary>
+        </member>
+        <member name="P:Study.Service.UserService.Req.UpdatePasswordDto.ConfirmPassword">
+            <summary>
+            确认密码
+            </summary>
+        </member>
+        <member name="P:Study.Service.UserService.Res.SchoolClassDto.Id">
+            <summary>
+            班级Id
+            </summary>
+        </member>
+        <member name="P:Study.Service.UserService.Res.SchoolClassDto.Name">
+            <summary>
+            班级名称
+            </summary>
+        </member>
+        <member name="P:Study.Service.UserService.Res.SchoolClassDto.Desc">
+            <summary>
+            班级描述
+            </summary>
+        </member>
+        <member name="T:Study.Service._Configure.AutoInjectAttribute">
+            <summary>
+            自动注入属性
+            </summary>
+        </member>
+        <member name="P:Study.Service._Configure.AutoInjectAttribute.ImplClass">
+            <summary>
+            实现的接口类
+            </summary>
+        </member>
+        <member name="M:Study.Service._Configure.AutoInjectAttribute.#ctor(System.Type)">
+            <summary>
+            
+            </summary>
+            <param name="implementedInterface">实现该接口的类</param>
+        </member>
+        <member name="T:Study.Service.ConfigCustomService">
+            <summary>
+            自动配置用户服务类
+            </summary>
+        </member>
+    </members>
+</doc>

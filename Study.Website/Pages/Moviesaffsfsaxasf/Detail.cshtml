@@ -1,0 +1,218 @@
+﻿@page "{Id}/{Index?}"
+@model Study.Website.Pages.Movie.DetailModel
+@{
+    ViewData[ConstStrings.Title] = Model.Video.Name;
+
+    ViewData[ConstStrings.Keywords] = Model.Video.Name;
+
+
+    ViewData[ConstStrings.Description] = $"{Model.Video.Year} {Model.Video.Area} 主演:{Model.Video.Actor} 导演:{Model.Video.Director} 简介:{Model.Video.Desc}".PadLeft(75);
+}
+
+
+@section head{
+    <style>
+        .btn32 {
+            width: 32px;
+            height: 32px;
+        }
+    </style>
+    <!--dplayer-->
+    <link href="~/DPlayer/DPlayer.min.css" rel="stylesheet" asp-append-version="true">
+}
+
+
+<div class="row mt-1">
+    <div class="col-12 col-md-8">
+        <box>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/Movie/Index/@Model.VideoType.Id">
+                            @Model.VideoType.Name
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">
+                        @Model.Video.Name
+                        &nbsp;<label class="text-danger text-sm">@Model.Video.Note</label>
+                    </li>
+                </ol>
+            </nav>
+
+            <div style="margin:0 auto 30px;">
+                @if (!Model.IndexInfo.url.EndsWith("m3u8"))
+                {
+                    <iframe src="@Model.IndexInfo.url" style="width:100%;height:400px"></iframe>
+                }
+                else
+                {
+                    <div id="dplayer"></div>
+                }
+            </div>
+
+            <h5 class="text-black">@Model.Video.Name <span class="text-sm">第 @Model.Index 集</span> </h5>
+            <div class="text-muted text-sm d-flex flex-row-reverse">
+                @*<a class="btn btn-outline-primary" href="@Model.IndexInfo.url">
+                        <svg t="1570422785873" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4448" width="16" height="16"><path d="M927.939299 608.060701c-31.995331 0-30.395564 31.995331-30.395564 31.995331v255.962645c0 35.194864-28.795798 63.990661-63.990662 63.990662h-703.897275c-35.194864 0-63.990661-28.795798-63.990661-63.990662V256.112064c0-35.194864 28.795798-63.990661 63.990661-63.990662H384.018677s31.995331 0 31.995331-31.99533-31.995331-31.995331-31.995331-31.995331H128.056032c-70.389727 0-127.981323 57.591595-127.981323 127.981323v639.906613c0 70.389727 57.591595 127.981323 127.981323 127.981323h703.897275c70.389727 0 127.981323-57.591595 127.981323-127.981323V640.056032s0-31.995331-31.995331-31.995331z" fill="#999999" p-id="4449"></path><path d="M1009.527392 321.702492L625.583424 6.548484c-20.796965-15.997665-51.192529 0-49.592763 19.197199V192.121402s-102.385058 38.394397-220.767781 161.57642C236.840156 475.280079 193.64646 726.443425 192.046693 729.642958c-4.7993 28.795798 28.795798 47.992996 52.792296 28.795797 4.7993-3.199533 47.992996-70.389727 167.975486-155.177353S575.990661 513.674476 575.990661 513.674476v151.97782c-3.199533 30.395564 23.996498 44.793463 44.793463 31.995331L1007.927626 374.494787c19.197198-11.198366 19.197198-38.394397 1.599766-52.792295zM639.981323 601.661635V480.079378c0-27.196031-31.995331-35.194864-63.990662-30.395564-14.397899 1.599767-86.387393 27.196031-169.575252 83.18786-83.18786 55.991829-134.380389 108.784124-134.380389 108.784124s22.396731-142.379222 129.581089-251.163345c60.791128-62.390895 137.579922-103.984825 174.374552-124.78179 31.995331-14.397899 63.990661-33.595097 63.990662-73.589261V89.736344l319.953307 255.962646-319.953307 255.962645z" fill="#999999" p-id="4450"></path></svg>
+                        下载
+                    </a>*@
+                <button class="btn btn-outline-primary" onclick="makeShortLink()" id="btn_shared">
+                    <svg t="1570422785873" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4448" width="16" height="16"><path d="M927.939299 608.060701c-31.995331 0-30.395564 31.995331-30.395564 31.995331v255.962645c0 35.194864-28.795798 63.990661-63.990662 63.990662h-703.897275c-35.194864 0-63.990661-28.795798-63.990661-63.990662V256.112064c0-35.194864 28.795798-63.990661 63.990661-63.990662H384.018677s31.995331 0 31.995331-31.99533-31.995331-31.995331-31.995331-31.995331H128.056032c-70.389727 0-127.981323 57.591595-127.981323 127.981323v639.906613c0 70.389727 57.591595 127.981323 127.981323 127.981323h703.897275c70.389727 0 127.981323-57.591595 127.981323-127.981323V640.056032s0-31.995331-31.995331-31.995331z" fill="#999999" p-id="4449"></path><path d="M1009.527392 321.702492L625.583424 6.548484c-20.796965-15.997665-51.192529 0-49.592763 19.197199V192.121402s-102.385058 38.394397-220.767781 161.57642C236.840156 475.280079 193.64646 726.443425 192.046693 729.642958c-4.7993 28.795798 28.795798 47.992996 52.792296 28.795797 4.7993-3.199533 47.992996-70.389727 167.975486-155.177353S575.990661 513.674476 575.990661 513.674476v151.97782c-3.199533 30.395564 23.996498 44.793463 44.793463 31.995331L1007.927626 374.494787c19.197198-11.198366 19.197198-38.394397 1.599766-52.792295zM639.981323 601.661635V480.079378c0-27.196031-31.995331-35.194864-63.990662-30.395564-14.397899 1.599767-86.387393 27.196031-169.575252 83.18786-83.18786 55.991829-134.380389 108.784124-134.380389 108.784124s22.396731-142.379222 129.581089-251.163345c60.791128-62.390895 137.579922-103.984825 174.374552-124.78179 31.995331-14.397899 63.990661-33.595097 63.990662-73.589261V89.736344l319.953307 255.962646-319.953307 255.962645z" fill="#999999" p-id="4450"></path></svg>
+                    分享
+                </button>
+                @*<button class="btn btn-primary">
+                        <svg t="1570422785873" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4448" width="16" height="16"><path d="M927.939299 608.060701c-31.995331 0-30.395564 31.995331-30.395564 31.995331v255.962645c0 35.194864-28.795798 63.990661-63.990662 63.990662h-703.897275c-35.194864 0-63.990661-28.795798-63.990661-63.990662V256.112064c0-35.194864 28.795798-63.990661 63.990661-63.990662H384.018677s31.995331 0 31.995331-31.99533-31.995331-31.995331-31.995331-31.995331H128.056032c-70.389727 0-127.981323 57.591595-127.981323 127.981323v639.906613c0 70.389727 57.591595 127.981323 127.981323 127.981323h703.897275c70.389727 0 127.981323-57.591595 127.981323-127.981323V640.056032s0-31.995331-31.995331-31.995331z" fill="#999999" p-id="4449"></path><path d="M1009.527392 321.702492L625.583424 6.548484c-20.796965-15.997665-51.192529 0-49.592763 19.197199V192.121402s-102.385058 38.394397-220.767781 161.57642C236.840156 475.280079 193.64646 726.443425 192.046693 729.642958c-4.7993 28.795798 28.795798 47.992996 52.792296 28.795797 4.7993-3.199533 47.992996-70.389727 167.975486-155.177353S575.990661 513.674476 575.990661 513.674476v151.97782c-3.199533 30.395564 23.996498 44.793463 44.793463 31.995331L1007.927626 374.494787c19.197198-11.198366 19.197198-38.394397 1.599766-52.792295zM639.981323 601.661635V480.079378c0-27.196031-31.995331-35.194864-63.990662-30.395564-14.397899 1.599767-86.387393 27.196031-169.575252 83.18786-83.18786 55.991829-134.380389 108.784124-134.380389 108.784124s22.396731-142.379222 129.581089-251.163345c60.791128-62.390895 137.579922-103.984825 174.374552-124.78179 31.995331-14.397899 63.990661-33.595097 63.990662-73.589261V89.736344l319.953307 255.962646-319.953307 255.962645z" fill="#999999" p-id="4450"></path></svg>
+                        收藏
+                    </button>*@
+
+                @*@{
+                        var curUser = await UserManager.GetUserAsync(User);
+                    }
+                    @if (curUser != null && await UserManager.IsInRoleAsync(curUser, ConstStrings.Role_Admin))
+                    {
+                        <form method="post" asp-page-handler="DeleteMovie" asp-route-Id="@Model.Id">
+                                <input class="btn btn-outline-danger" type="submit" value="删除" />
+                            </form>
+                    }*@
+            </div>
+            <hr />
+            <div class="text-sm">
+                <div class="row">
+                    <div class="col-4">更新时间</div>
+                    <div class="col-8">@Model.Video.LastUpdateTime</div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-4">年份</div>
+                    <div class="col-8">@Model.Video.Year</div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-4">导演</div>
+                    <div class="col-8">@Html.Raw(Model.Video.Director)</div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-4">主演</div>
+                    <div class="col-8">@Html.Raw(Model.Video.Actor)</div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-4">简介</div>
+                    <div class="col-8">@(Model.Video.Desc ?? "")</div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-4">国家地区</div>
+                    <div class="col-8">@Model.Video.Area</div>
+                </div>
+            </div>
+            @*<a class="btn btn-info" href="/Movie/AddMovie/@Model.Id">修改</a>*@
+        </box>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <box>
+            @*挂广告*@
+            @Html.Raw((await Model.advertisementService.GetAdvertisementAsync()) ?? string.Empty)
+        </box>
+
+        @if (Model.IndexInfo.count > 1)
+        {
+            <box title="视频集数" class-name="mt-3">
+                @for (int i = 1; i <= Model.IndexInfo.count; i++)
+                {
+                    if (Model.Index == i)
+                    {
+                        <a href="/Movie/Detail/@Model.Id/@i" class="btn btn-primary btn-sm ml-3 mb-3 btn32 text-center">@i</a>
+                    }
+                    else
+                    {
+                        <a href="/Movie/Detail/@Model.Id/@i" class="btn btn-outline-primary btn-sm ml-3 mb-3 btn32 text-center">@i</a>
+                    }
+                }
+            </box>
+        }
+
+        <box title="相关推荐" class-name="mt-3">
+            <ul class="list-unstyled">
+                @{
+                    var videos = (await MovieService.GetVideosAsync(new int[] { Model.VideoType.Id }, 0));
+                }
+                @foreach (var video in videos)
+                {
+                    <a href="/Movie/Detail/@video.Id" style="color:#222222">
+                        <li class="media my-4">
+
+                            <img data-original="@video.Picture" class="mr-3" alt="..." style="width:38px;height:50px">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1">@video.Name</h5>
+                                @Utility.DateTimeFormat.DateStringFromNow(video.LastUpdateTime.Value) 更新
+                            </div>
+                        </li>
+                    </a>
+                }
+            </ul>
+        </box>
+
+
+        @*<box title="重要说明" class-name="mt-3">
+                1、本站所有视频和图片均来自互联网，网络爬虫收集而来，版权归原创者所有，本网站只提供web页面服务，并不提供资源存储，也不参与录制、上传，
+                若本站收录的视频和图片无意侵犯了贵司版权，请发邮件至943866961@qq.com。<br />
+                2、切勿相信视频中的广告，如轻信视频中的广告而造成的一切损失与本网站无关。<br />
+                3、如果观看视频时卡顿，可以刷新试下，视频的播放地址全部是互联网上的，播放地址可能会失效，网速快慢和本站没有关系哦<br />
+                4、如果视频不能播放或者想找某部视频的资源可以发帖反馈😄
+            </box>*@
+    </div>
+</div>
+
+
+@section Scripts{
+    <!--DPlayer-->
+    @*<script src="~/DPlayer/DPlayer.min.js"></script>
+        <script src="~/DPlayer/hls.js"></script>*@
+
+    <script src="~/DPlayer/DPlayer.bundle.min.js" asp-append-version="true"></script>
+
+    <script>
+        // 复制的方法
+        function copyText(text, callback) { // text: 要复制的内容， callback: 回调
+            var tag = document.createElement('input');
+            tag.setAttribute('id', 'cp_hgz_input');
+            tag.value = text;
+            document.getElementsByTagName('body')[0].appendChild(tag);
+            document.getElementById('cp_hgz_input').select();
+            document.execCommand('copy');
+            document.getElementById('cp_hgz_input').remove();
+            if (callback) { callback(text) }
+        }
+
+        function makeShortLink() {
+            var text = "电影名称：@Html.Raw(Model.Video.Name)\n"
+                + "第 @Model.Index 集\n"
+                + "导演：@Html.Raw(Model.Video.Director)\n"
+                + "主演：@Html.Raw(Model.Video.Actor)\n"
+                + "上映年份：@Model.Video.Year\n"
+                + "播放链接：" + window.location.href;
+
+                copyText(text, function () {
+                    swal("复制到剪贴板了啦，如果不能粘贴，请手动复制下", text, 'success')
+                })
+        }
+    </script>
+
+
+    @if (Model.IndexInfo.url.EndsWith("m3u8"))
+    {
+        <script>
+            $(function () {
+                const dp = new DPlayer({
+                    container: document.getElementById('dplayer'),
+                    video: {
+                        url: '@Model.IndexInfo.url'
+                    }
+                })
+            })
+        </script>
+    }
+}

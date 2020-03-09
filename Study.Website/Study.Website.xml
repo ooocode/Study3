@@ -1,0 +1,420 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Study.Website</name>
+    </assembly>
+    <members>
+        <member name="F:Study.WebApp.Data.ClaimString.AllowOperateArticalClassification">
+            <summary>
+            允许操作文章分类
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Account.UpdateInfoModel.ProfilePhoto">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="M:Study.WebApp.Pages.Account.UpdateInfoModel.OnPostUploadPhotoAsync(Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            上传头像
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.WebApp.Pages.Account.UpdateInfoModel.OnPostUpdateAsync(Study.Services.UserService.Req.UpdateDto)">
+            <summary>
+            更新信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Study.WebApp.Pages.Account.UpdateInfoModel.updatePasswordDto">
+            <summary>
+            更新密码模型
+            </summary>
+        </member>
+        <member name="M:Study.WebApp.Pages.Account.UpdateInfoModel.OnPostUpdatePasswordAsync(Study.Service.UserService.Req.UpdatePasswordDto)">
+            <summary>
+            更新信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.ArticalDetailModel.addArticalCommentDto">
+            <summary>
+            添加文章评论模型
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.ArticalDetailModel.Artical">
+            <summary>
+            文章
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.ArticalDetailModel.ClassificationInfo">
+            <summary>
+            文章的分类信息
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.ArticalDetailModel.Author">
+            <summary>
+            作者信息
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.ArticalDetailModel.Comments">
+            <summary>
+            评论
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.ArticalDetailModel.AuthorOtherArticals">
+            <summary>
+            作者其他文章
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.ArticalDetailModel.IsMyArtical">
+            <summary>
+            是否是我的文章
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.ArticalDetailModel.IsAdmin">
+            <summary>
+            我是不是管理员  管理员可以删除任何文字
+            </summary>
+        </member>
+        <member name="M:Study.WebApp.Pages.Forum.ArticalDetailModel.OnPostAsync(Study.Services.ArticalService.Req.AddArticalCommentDto)">
+            <summary>
+            添加评论
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Study.WebApp.Pages.Forum.ArticalDetailModel.OnPostDeleteArticalComment(System.Int64)">
+            <summary>
+            删除文章评论
+            </summary>
+            <param name="articalId"></param>
+            <param name="commentId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.WebApp.Pages.Forum.ArticalDetailModel.OnPostSetTopAsync(System.Int64,System.Boolean)">
+            <summary>
+            设置置顶
+            </summary>
+            <param name="articalId"></param>
+            <param name="isSetTop"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.PublishArticalModel.Id">
+            <summary>
+            文章id, Id不为空时，修改文章
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.PublishArticalModel.ArticalClassifications">
+            <summary>
+            文章分类
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.PublishArticalModel.AddOrUpdateArticalModel.ClassificationId">
+             <summary>
+            分类Id
+             </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.PublishArticalModel.AddOrUpdateArticalModel.Title">
+            <summary>
+            文章标题
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Forum.PublishArticalModel.AddOrUpdateArticalModel.Content">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="M:Study.WebApp.Pages.Forum.PublishArticalModel.removeNodes(HtmlAgilityPack.HtmlDocument,System.String[])">
+            <summary>
+            移除所有匹配到的xpath对于的节点
+            </summary>
+            <param name="htmlDocument"></param>
+            <param name="xpaths"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.WebApp.Pages.Teacher.AddTaskModel.TaskId">
+            <summary>
+            作业id 如果id不为空则是修改
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Teacher.AddTaskModel.addTeacherTaskModel">
+            <summary>
+            添加任务模型
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Teacher.AddTaskModel.CourseName">
+            <summary>
+            课程名称
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Teacher.AddTaskModel.TeacherClasses">
+            <summary>
+            教师已经添加的的班级
+            </summary>
+        </member>
+        <member name="P:Study.WebApp.Pages.Teacher.AddTaskModel.TeacherCourses">
+            <summary>
+            教师的课程
+            </summary>
+        </member>
+        <member name="M:Study.WebApp.Pages.Teacher.AddTaskModel.OnPost(Study.Services.TaskService.Req.AddTeacherTaskDto)">
+            <summary>
+            发布作业
+            </summary>
+            <param name="addTeacherTaskModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.WebApp.Pages.Teacher.AddTaskModel.AddTask(Study.Services.TaskService.Req.AddTeacherTaskDto)">
+            <summary>
+            添加作业
+            </summary>
+            <param name="addTeacherTaskModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.WebApp.Pages.Teacher.AddTaskModel.UpdateTask(Study.Services.TaskService.Req.AddTeacherTaskDto)">
+            <summary>
+            修改作业信息
+            </summary>
+            <param name="addTeacherTaskModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Study.Website.Pages.Account.LoginModel.UserLoginModel">
+            <summary>
+            用户登录模型
+            </summary>
+        </member>
+        <member name="M:Study.Website.Pages.Account.LoginModel.OnGetVerifyCode">
+            <summary>
+            客户端请求验证码
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Forum.ArticalClassificationManageModel.AddArticalClassificationDto">
+            <summary>
+            添加文章分类
+            </summary>
+        </member>
+        <member name="M:Study.Website.Pages.Forum.ArticalClassificationManageModel.OnPostDeleteClassificationAsync(System.Int64)">
+            <summary>
+            删除分类
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Website.Pages.Forum.ArticalClassificationManageModel.OnPostUpdateArticalClassificationAsync(System.Int64)">
+            <summary>
+            更新文章分类
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.Website.Pages.Student.IndexModel.CompletedTaskList">
+            <summary>
+            已完成的作业列表
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Student.IndexModel.UnCompletedTaskList">
+            <summary>
+            未完成的作业列表
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Student.TaskDetailModel.StudentTaskInfo">
+            <summary>
+            学生的作业信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Student.TaskDetailModel.TaskInfo">
+            <summary>
+            作业信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Student.TaskDetailModel.CourseInfo">
+            <summary>
+            课程信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Student.TaskDetailModel.setStudentAnswerModel">
+            <summary>
+            答题模型
+            </summary>
+        </member>
+        <member name="M:Study.Website.Pages.Teacher.AddCourseModel.AddCourseAsync(Study.Service.CourseService.Req.AddCourseDto)">
+            <summary>
+            添加课程
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Website.Pages.Teacher.AddCourseModel.UpdateCourseAsync(Study.Service.CourseService.Req.AddCourseDto)">
+            <summary>
+            更新课程信息
+            </summary>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.AddTeacherClassModel.SchoolClasses">
+            <summary>
+            学校全部班级
+            </summary>
+        </member>
+        <member name="M:Study.Website.Pages.Teacher.AddTeacherClassModel.OnPostAddTeacherClassAsync(Study.Services.UserService.Req.AddTeacherClassDto)">
+            <summary>
+            添加教师班级
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Study.Website.Pages.Teacher.ClassDetailModel">
+            <summary>
+            班级细节
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.ClassDetailModel.ClassInfo">
+            <summary>
+            班级信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.ClassDetailModel.ClassStudents">
+            <summary>
+            班级学生
+            </summary>
+        </member>
+        <member name="M:Study.Website.Pages.Teacher.ClassDetailModel.OnPostDeleteTeacherClassAsync(System.String)">
+            <summary>
+            删除教师班级
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Website.Pages.Teacher.CourseDetailModel.OnPostDeleteCourseAsync(System.String)">
+            <summary>
+            删除课程
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Study.Website.Pages.Teacher.ImportStudentsModel.OnPostAsync(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            添加学生
+            </summary>
+            <param name="upload"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Study.Website.Pages.Teacher.MarkStudentTaskModel">
+            <summary>
+            批改学生作业
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.MarkStudentTaskModel.StudentInfo">
+            <summary>
+            学生信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.MarkStudentTaskModel.StudentTask">
+            <summary>
+            学生作业信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.MarkStudentTaskModel.TaskInfo">
+            <summary>
+            教师发布的这份作业信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.MarkStudentTaskModel.setStudentGradeModel">
+            <summary>
+            批改作业模型
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.TaskDetailModel.TaskInfo">
+            <summary>
+            作业信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.TaskDetailModel.CourseInfo">
+            <summary>
+            课程信息
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.TaskDetailModel.StudentTasks">
+            <summary>
+            学生作业情况
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.TaskDetailModel.CompletedNoMark">
+            <summary>
+            完成未批改
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.TaskDetailModel.UnCompleted">
+            <summary>
+            未完成
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.TaskDetailModel.CompletedMark">
+            <summary>
+            已完成已批改
+            </summary>
+        </member>
+        <member name="M:Study.Website.Pages.Teacher.TaskDetailModel.OnPostDeleteTaskAsync(System.String)">
+            <summary>
+            删除教师作业
+            </summary>
+            <param name="taskId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.TeacherFriendModel.UserFriends">
+            <summary>
+            助手表
+            </summary>
+        </member>
+        <member name="P:Study.Website.Pages.Teacher.TeacherFriendModel.OtherTeachers">
+            <summary>
+            其他可以添加的教师
+            </summary>
+        </member>
+        <member name="P:Study.Website.TagHelpers.BoxTagHelper.Title">
+            <summary>
+            Box的标题
+            </summary>
+        </member>
+        <member name="P:Study.Website.TagHelpers.Box3TagHelper.Title">
+            <summary>
+            Box的标题
+            </summary>
+        </member>
+        <member name="T:Study.Website.TagHelpers.ModalTagHelper">
+             <summary>
+             模态框 【setTitle】【function onModalShow(relatedTarget) {}】
+             示例
+             ***********
+             **onModalShow 必须放到modal里面
+             ** 定义一个函数，用于执行模态框显示的时候所需要执行的动作（可以为空，命名必须是function onModalShow(relatedTarget)）
+             ** relatedTarget 表面是哪个控件点击了模态框
+             **
+             ***********
+             <modal id="modalTable" title="模态框标题">
+                  <script>
+                     function onModalShow(relatedTarget) {// }
+                  </script>
+             </modal>  
+            ***********
+             </summary>
+        </member>
+        <member name="P:Study.Website.TagHelpers.ModalTagHelper.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:Study.WebApplication.Pages.Forum.IndexModel.ArticalClassificationInfo">
+            <summary>
+            分类信息
+            </summary>
+        </member>
+        <member name="M:Study.WebApplication.Pages.Forum.IndexModel.OnGetLoadArticalsAsync(System.Int32)">
+            <summary>
+            获取文章
+            </summary>
+            <param name="skipCount"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

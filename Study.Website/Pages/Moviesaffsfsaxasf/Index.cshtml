@@ -1,0 +1,157 @@
+﻿@page "{Id:long?}"
+@model Study.Website.Pages.Movie.IndexModel
+@{
+    if (Model.Id.HasValue)
+    {
+        ViewData[ConstStrings.Title] = Model.CurVideoType.Name;
+    }
+    else
+    {
+        ViewData[ConstStrings.Title] = "全部电影";
+    }
+
+    var allTypeNames = (await MovieService.GetVideoTypesAsync().ConfigureAwait(false)).Select(e => e.Name);
+    ViewData[ConstStrings.Keywords] = string.Join(",", allTypeNames);
+    ViewData[ConstStrings.Description] = string.Join(",", allTypeNames);
+}
+
+
+@*@if (await UserService.IsInRoleAsync(UserService.GetCurUserId(), ConstStrings.Role_Admin))
+    {
+        <a href="/Movie/AddMovie" class="btn btn-primary float-right">
+            添加电影
+        </a>
+        <a href="/Movie/ClassificationManager" class="btn btn-primary float-right">
+            分类管理
+        </a>
+    }*@
+
+
+
+
+<div class="row">
+    <div class="col-12 col-md-8">
+        <box title="@Model.CurVideoType.Name">
+            <div id="app">
+                <div class="row">
+                    <div class="col-6 col-sm-4 col-md-4 mt-3" v-for="movie in movies">
+                        <a :href="getUrl(movie.Id)" class="text-black" :title="movie.Name">
+                            <div>
+                                <img :data-original="movie.Picture"
+                                     class="img-fluid " alt="..." style="width:150px;height:200px" />
+                            </div>
+                            {{movie.Name}}<br />
+                            <label class="text-sm text-danger">{{movie.Note}}</label>
+                        </a>
+                    </div>
+                </div>
+
+                <img v-if="isShowLoading" src="~/images/loading.gif" class="img-fluid" />
+                <button v-on:click="loadMovies()" class="btn btn-outline-primary btn-block">加载更多</button>
+            </div>
+        </box>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <box>
+            @*挂广告*@
+            @Html.Raw((await Model.advertisementService.GetAdvertisementAsync()) ?? string.Empty)
+        </box>
+
+        <box title="最近更新" class-name="mt-3">
+            @{
+                IEnumerable<Study.Database.VideoDb.Video> videos = null;
+                //子分类
+                if (Model.CurVideoType.ParentTypeId.HasValue)
+                {
+                    videos = await MovieService.GetVideosAsync(new int[] { Model.Id.Value }, 0);
+                }
+                else
+                {
+                    //大分类id  找出当前子分类
+                    var subTypes = (await MovieService.GetVideoTypesAsync())
+                        .Where(e => e.ParentTypeId == Model.Id)
+                        .Select(e => e.Id)
+                        .ToArray();
+                    videos = await MovieService.GetVideosAsync(subTypes, 0);
+                }
+
+                <ul class="list-unstyled">
+                    @foreach (var video in videos)
+                    {
+                        <a href="/Movie/Detail/@video.Id" style="color:#222222">
+                            <li class="media my-4">
+
+                                <img data-original="@video.Picture" class="mr-3" alt="..." style="width:38px;height:50px">
+                                <div class="media-body">
+                                    <h5 class="mt-0 mb-1">@video.Name</h5>
+                                    @Utility.DateTimeFormat.DateStringFromNow(video.LastUpdateTime.Value) 更新
+                                </div>
+                            </li>
+                        </a>
+                    }
+                </ul>
+            }
+        </box>
+    </div>
+</div>
+@section Scripts{
+    <script>
+         var app = new Vue({
+            el: '#app',
+            data: {
+                isShowLoading: false,
+                skinCount: 0,
+                movies: [],
+            },
+            created: function () {
+                this.loadMovies()
+            },
+             mounted: function () {
+                 window.addEventListener('scroll', this.lazyLoading); // 滚动到底部，再加载的处理事件
+             },
+             watch: {
+                 "movies": function () {
+                     this.$nextTick(function () {
+                         $("img").lazyload();
+                     })
+
+                 }
+             },
+             methods: {
+                 getUrl: function (id) {
+                     return "/Movie/Detail/" + id
+                 },
+                 lazyLoading: function () { // 滚动到底部，再加载的处理事件
+                     let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                     let clientHeight = document.documentElement.clientHeight;
+                     let scrollHeight = document.documentElement.scrollHeight;
+                     if (scrollTop + clientHeight >= scrollHeight) { // 如果滚动到接近底部，自动加载下一页
+                         //事件处理
+                         this.loadMovies()
+                     }
+                 },
+                loadMovies: function () {
+                    this.isShowLoading = true
+                    var url = '/Movie/Index/@Model.Id?handler=LoadMovies&skipCount='
+                        + this.skinCount
+                        + '&_t='
+                        + Date.now()
+
+
+                    var t = this
+                    axios.get(url).then(function (response) {
+                        $.each(response.data, function (index, value) {
+                            t.movies.push(value)
+                        })
+
+                        t.skinCount += 12
+                        t.isShowLoading = false
+                    }).catch(function (err) {
+
+                    })
+                 }
+            }
+        })
+    </script>
+}

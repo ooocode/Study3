@@ -1,0 +1,23 @@
+﻿@page
+@model Study.Website.AdvertisementModel
+@{
+    ViewData["Title"] = "Advertisement";
+}
+@using Study.Website;
+
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <box title="更新广告代码">
+                <form method="post">
+                    <textarea class="form-control" name="text"></textarea>
+                    <input type="submit" class="btn btn-info btn-primary" value="提交广告"/>
+                </form>
+            </box>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <box title="广告代码">
+                @await Model.AdvertisementService.GetAdvertisementAsync()
+            </box>
+        </div>
+    </div>

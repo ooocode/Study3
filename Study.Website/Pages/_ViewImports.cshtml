@@ -1,0 +1,81 @@
+@using Study.WebApp
+@using Utility
+@using Microsoft.AspNetCore.Authentication
+
+@using Microsoft.AspNetCore.Http
+@using System.Linq
+@using System.Linq.Expressions
+@using System.Security.Claims
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Caching.Memory;
+
+@namespace Study.WebApp.Pages
+
+@using Study.Website.TagHelpers
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Study.Website
+
+<!--文章服务-->
+@using Study.Services.ArticalService.Req
+@using Study.Services.ArticalService.Res
+@using Study.Services.ArticalService
+@inject IArticalService ArticalService
+<!--课程服务-->
+@using Study.Services.CourseService
+@using Study.Service.CourseService.Req
+@using Study.Service.CourseService.Res
+@inject ICourseService CourseService
+
+
+@inject IMemoryCache Cache
+
+@using Study.WebApp.Data
+
+
+@using Study.Services.TaskService;
+@using Study.Services.TaskService.Req;
+@using Study.Services.TaskService.Res;
+@inject ITaskService TaskService
+
+
+@using Study.Services.UserService;
+@using Study.Services.UserService.Res;
+@using Study.Services.UserService.Req;
+@inject IUserService UserService
+
+
+@using Microsoft.AspNetCore.Identity
+
+@using UserGrpcService
+@inject UserGrpcService.User.UserClient UserClient
+
+
+
+@using Study.Service.MovieService;
+@inject IMovieService MovieService
+
+
+@using Study.Database.VideoDb
+@inject VideoDbContext VideoDbContext
+
+
+@inject IAuthorizationService AuthorizationService
+
+@using StackExchange.Profiling
+@addTagHelper *, MiniProfiler.AspNetCore.Mvc
+
+@using TagHelperSamples
+@using TagHelperSamples.Authorization
+@addTagHelper "*, TagHelperSamples.Authorization"
+
+@addTagHelper *, Volo.Abp.AspNetCore.Mvc.UI.Bundling
+
+@using UserGrpcService
+
+@using Study.Database
+@inject UserDatabaseContext UserDatabaseContext
+
+@using Permissons;

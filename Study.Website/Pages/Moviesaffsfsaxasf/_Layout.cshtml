@@ -1,0 +1,206 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@Html.Raw(ViewData[ConstStrings.Title]) - 学习坊电影专区</title>
+    <meta name="keywords" content="@Html.Raw(ViewData[ConstStrings.Keywords]??"")" />
+    <meta name="description" content="@Html.Raw(ViewData[ConstStrings.Description]??"")" />
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--google浏览器禁止http  所以要加上这一行-->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    @RenderSection("head", required: false)
+
+    <script data-ad-client="ca-pub-5890646538154772" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics 谷歌分析-->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154464360-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-154464360-1');
+    </script>
+</head>
+
+<body style="background-color:rgb(248,249,250)">
+
+    @*<mini-profiler />*@
+    <div class="container-fluid">
+        <ul class="nav justify-content-center" style="background-color:rgba(0,0,0,0.8)">
+            <li class="nav-item my-2">
+                <a class="navbar-brand text-white" href="/Forum/Index">
+                    @*<img src="~/logo.png" style="width:80px" />*@
+                    学习坊
+                </a>
+            </li>
+
+            @{
+                //获取所有视频分类
+                var types = await MovieService.GetVideoTypesAsync();
+                foreach (var type in types.Where(e => !e.ParentTypeId.HasValue))
+                {
+
+                    <li class="nav-item my-2">
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle  border-0  text-white" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @type.Name
+                            </button>
+
+                            @{
+
+                                //没有父目录 说明这是电影 电视剧 综艺 动漫等  需要找出他的子目录
+
+                                IEnumerable<VideoType> subTypes = (await MovieService.GetVideoTypesAsync().ConfigureAwait(false)).Where(e => e.ParentTypeId == type.Id);
+
+                            }
+                            <div class="dropdown-menu">
+                                @{
+                                    foreach (var item in subTypes)
+                                    {
+                                        <a class="dropdown-item" href="/Movie/Index/@item.Id">@item.Name</a>
+                                    }
+                                }
+                            </div>
+
+                        </div>
+                    </li>
+                }
+            }
+
+            <li class="nav-item my-2">
+                <form class="form-inline" method="get" asp-page="SearchResult">
+
+                    <span class="input-group mb-3">
+                        <input type="text" class="form-control border-0" style="background-color:rgba(255,255,255,0.8)"
+                               name="search" placeholder="视频名称、主演或导演"
+                               aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <span class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><span class="text-white">查询</span></button>
+                        </span>
+                    </span>
+                </form>
+            </li>
+            @*<li class="nav-item my-2">
+                    <img src="~/logo.png" class="img-fluid" style="width:32px;height:32px" />
+                </li>*@
+        </ul>
+    </div>
+
+
+
+
+    <div style="margin-top:10px" class="container">
+        @RenderBody()
+    </div>
+
+
+    
+        <div class="container mt-2 mb-0 border-top">
+            <div class="row">
+                <div class="col">
+                    Copyright &copy; 2019 - 看剧网<br /> @*- <a asp-page="/Forum/Privacy">隐私政策</a>*@
+                    <p>
+                        本站所有视频和图片均来自互联网，版权归原创者所有，本网站只提供web页面服务，并不提供资源存储，也不参与录制、上传，
+                        若本站收录的视频和图片无意侵犯了贵司版权,请联系管理员删除。
+                    </p>
+                </div>
+            </div>
+
+            @*<div class="row">
+                    <div class="col">
+                        <a style="font-size:13px;color:#939393;" target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=45048102000066">
+                            <img src="~/images/beian.png" asp-append-version="true" />
+                            桂公网安备 45048102000066号&nbsp;|
+
+                        </a>
+                        <a style="font-size:13px;color:#939393;" target="_blank" href="http://www.beian.miit.gov.cn/">
+                            桂ICP备19007772号
+                        </a>
+                    </div>
+                </div>*@
+        </div>
+
+
+    <a class="to-top" style="opacity:0.8;"><svg t="1566700909250" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9528" width="32" height="32"><path d="M512.71932 73.09934c241.717266 0 439.476629 197.211553 439.476629 438.247896 0 241.036343-197.790082 438.206939-439.476629 438.206939-241.717266 0-439.476629-197.170596-439.476628-438.212059 0-241.036343 197.759363-438.247896 439.476628-438.247896m0-73.037903C227.039033 0.056317 0 233.786822 0 511.342116c0 277.524576 227.039033 511.255081 512.71932 511.255081 285.680288 0 512.688602-226.393948 512.688603-511.255081C1025.413042 226.450265 798.404728 0.056317 512.72444 0.056317z m51.233023 803.416932v-394.423107l175.81113 175.334997 65.911255-73.037903-292.950288-292.166971L219.738314 511.342116l65.941974 73.037903 175.739454-175.329877v394.423107h102.532601z" p-id="9529" fill="#1296db"></path></svg></a>
+
+
+
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+
+
+    <!--axios-->
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+
+    <script src="https://cdn.bootcss.com/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+
+    <script src="~/js/jquery.toTop.js"></script>
+    <script>
+        $('.to-top').toTop({
+            //options with default values
+            autohide: true,
+            offset: 100,
+            speed: 500,
+            position: true,
+            right: 15,
+            bottom: 30
+        });
+    </script>
+
+
+
+
+    @*<environment names="Production">
+            360搜索提交连接代码
+            <script>
+                (function () {
+                    var src = "https://jspassport.ssl.qhimg.com/11.0.1.js?d182b3f28525f2db83acfaaf6e696dba";
+                    document.write('<script src="' + src + '" id="sozz"><\/script>');
+                })();
+            </script>
+
+            360百度搜索提交连接代码
+            <script>
+                (function () {
+                    var bp = document.createElement('script');
+                    var curProtocol = window.location.protocol.split(':')[0];
+                    if (curProtocol === 'https') {
+                        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+                    }
+                    else {
+                        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+                    }
+                    var s = document.getElementsByTagName("script")[0];
+                    s.parentNode.insertBefore(bp, s);
+                })();
+            </script>
+        </environment>*@
+
+
+
+    @RenderSection("Scripts", required: false)
+
+
+    <script>
+        $(function () {
+            $("img").lazyload();
+        });
+    </script>
+</body>
+</html>

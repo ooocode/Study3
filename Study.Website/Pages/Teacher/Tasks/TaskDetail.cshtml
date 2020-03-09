@@ -1,0 +1,291 @@
+﻿@page "{TaskId?}"
+
+@model Study.Website.Pages.Teacher.TaskDetailModel
+@{
+    ViewData["Title"] = Model.TaskInfo.TaskName;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Teacher/Index">主页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.TaskInfo.TaskName</li>
+    </ol>
+</nav>
+
+
+
+<div class="row" id="app" style="display:none">
+    <div class="col-12 col-md-3">
+
+        <box title="作业信息">
+
+            <el-dialog title="@Model.TaskInfo.TaskName"
+                       :visible.sync="dialogVisible"
+                       width="80%"
+                       :before-close="handleClose">
+                <span>
+                    @Html.Raw(Model.TaskInfo.TaskContent)
+                </span>
+                <hr />
+                <div>
+                    <h3>附件</h3>
+                    <ol>
+                        <li v-for="file in files">
+                            <a :href="file.url" target="_blank">
+                                <i class="el-icon-paperclip"></i>
+                                {{file.name}}
+                            </a>
+                        </li>
+                    </ol>
+                </div>
+
+                <span slot="footer" class="dialog-footer">
+                    <el-button @@click="dialogVisible = false">取 消</el-button>
+                    @*<el-button type="primary" @@click="dialogVisible = false">确 定</el-button>*@
+                </span>
+            </el-dialog>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>作业名称</td>
+                        <td>@Model.TaskInfo.TaskName</td>
+                    </tr>
+
+                    <tr>
+                        <td>课程名称</td>
+                        <td>@Model.CourseInfo.Name</td>
+                    </tr>
+
+                    <tr>
+                        <td>开始时间</td>
+                        <td>@Utility.DateTimeFormat.ToLocalString(Model.TaskInfo.TaskStartTime)</td>
+                    </tr>
+
+                    <tr>
+                        <td>结束时间</td>
+                        <td>
+                            @Utility.DateTimeFormat.ToLocalString(Model.TaskInfo.TaskEndTime)
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <el-button type="primary" size="small" @@click="dialogVisible = true">查看作业内容</el-button>
+                        </td>
+                        <td>
+                            @{
+                                var dateStr = "已结束";
+                            }
+                            @if (DateTime.Now < Model.TaskInfo.TaskEndTime)
+                            {
+                                var val = Model.TaskInfo.TaskEndTime - DateTime.Now;
+                                dateStr = $"距离作业结束还剩 {val.Days} 天 {val.Hours} 小时 {val.Minutes}分";
+                            }
+                            <button class="btn btn-warning btn-sm">@dateStr</button>
+                        </td>
+                    </tr>
+
+                    <!--不允许助手删除和修改作业信息-->
+                    @if (Model.TaskInfo.TeacherId == Model.CurUserId)
+                    {
+                        <tr>
+                            <td>
+                                <a href="/Teacher/Tasks/AddTask/@Model.TaskInfo.Id" class="btn btn-sm btn-info">
+                                    修改作业信息
+                                </a>
+                            </td>
+
+                            <td>
+                                <form asp-page-handler="DeleteTask">
+                                    <input type="hidden" name="taskId" value="@Model.TaskId" />
+                                    <input type="submit" class="btn btn-sm btn-danger" value="删除" />
+                                </form>
+                            </td>
+                        </tr>
+                    }
+
+
+                    <tr>
+                        <td>
+                            <a class="btn btn-success btn-sm" href="/Teacher/Tasks/TaskDetail?handler=ExportData&taskId=@Model.TaskId">导出成绩</a>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </box>
+
+    </div>
+
+
+    <div class="col-12 col-md-9">
+
+        <box title="学生作业完成情况">
+            <template>
+                <el-tabs>
+                    <el-tab-pane label="未批改 @(Model.CompletedNoMark.Count())">
+                        <table id="id1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>学号</th>
+                                    <th>姓名</th>
+                                    <th>班级</th>
+                                    <th>批改</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <!--完成但没有批改-->
+                                @foreach (var studentTask in Model.CompletedNoMark)
+                                {
+                                    var studentInfo = await UserClient.FindByIdAsync(new UserIdReq { UserId = studentTask.StudentId });
+                                    var className = (await UserClient.GetSchoolClassByIdAsync(new IdReq { Id = studentInfo.ClassId })).Name;
+                                    <tr>
+                                        <td>@studentInfo.UserName</td>
+                                        <td>@studentInfo.Name</td>
+                                        <td>@className</td>
+                                        <!--学生id/作业id-->
+                                        <td><a href="/Teacher/Tasks/MarkStudentTask/@studentInfo.Id/@Model.TaskInfo.Id">批改</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+
+                    <el-tab-pane label="未完成 @(Model.UnCompleted.Count())">
+                        <!--未完成-->
+                        <table id="id2" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>学号</th>
+                                    <th>姓名</th>
+                                    <th>班级</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var studentTask in Model.UnCompleted)
+                                {
+                                    var studentInfo = await UserClient.FindByIdAsync(new UserIdReq { UserId = studentTask.StudentId });
+                                    var className = (await UserClient.GetSchoolClassByIdAsync(new IdReq { Id = studentInfo.ClassId })).Name;
+                                    <tr>
+                                        <td>@studentInfo.UserName</td>
+                                        <td>@studentInfo.Name</td>
+                                        <td>@className</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+
+                    <el-tab-pane label="已完成已批改 @(Model.CompletedMark.Count())">
+                        <!--已完成已批改-->
+                        <table id="id3" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>学号</th>
+                                    <th>姓名</th>
+                                    <th>班级</th>
+                                    <th>成绩</th>
+                                    <th>查看</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <!--完成但没有批改-->
+                                @foreach (var studentTask in Model.CompletedMark)
+                                {
+                                    var studentInfo = await UserClient.FindByIdAsync(new UserIdReq { UserId = studentTask.StudentId });
+                                    var className = (await UserClient.GetSchoolClassByIdAsync(new IdReq { Id = studentInfo.ClassId })).Name;
+
+                                    <tr>
+                                        <td>@studentInfo.UserName</td>
+                                        <td>@studentInfo.Name</td>
+                                        <td>@className</td>
+                                        <td>@((int)studentTask.Grade)</td>
+                                        <td><a href="/Teacher/Tasks/MarkStudentTask/@studentInfo.Id/@Model.TaskInfo.Id">批改</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </el-tab-pane>
+
+                </el-tabs>
+            </template>
+        </box>
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+
+        $(function () {
+            var config = {
+                "bAutoWidth": true, //是否自适应宽度
+                "oLanguage": { //国际化配置
+                    "sProcessing": "正在获取数据，请稍后...",
+                    "sLengthMenu": "显示 _MENU_ 条",
+                    "sZeroRecords": "没有您要搜索的内容",
+                    "sInfo": "从 _START_ 到  _END_ 条记录 总记录数为 _TOTAL_ 条",
+                    "sInfoEmpty": "记录数为0",
+                    "sInfoFiltered": "(全部记录数 _MAX_ 条)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "第一页",
+                        "sPrevious": "上一页",
+                        "sNext": "下一页",
+                        "sLast": "最后一页"
+                    }
+                },
+            }
+
+
+            var vue = new Vue({
+                el: "#app",
+                data: {
+                    dialogVisible: false,
+                    files:[]
+                },
+                created: function () {
+                    this.files = JSON.parse('@Html.Raw(Model.TaskInfo.Files)')
+                },
+
+                mounted: function () {
+                    $('#id1').DataTable(config)
+                    $('#id2').DataTable(config)
+                    $('#id3').DataTable(config)
+
+                    $("#app").removeAttr("style")
+                }
+            })
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('form').ajaxForm({
+                beforeSubmit: function (formData, jqForm, options) {
+                    return confirm('您确定要删除吗？一旦确定将永久性删除')
+                },
+
+                success: function (responseText, statusText, xhr, $form) {
+                    swal("成功", "即将转到" + responseText, 'success')
+                    window.location.href = responseText
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    console.log('进度百分比' + percentComplete)
+                },
+                error: function (errmsg) {
+                    swal("失败", JSON.stringify(errmsg.responseJSON), 'error')
+                }
+            });
+        });
+    </script>
+}

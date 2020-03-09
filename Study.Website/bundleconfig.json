@@ -1,0 +1,22 @@
+[
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/bundle.css",
+    "inputFiles": [
+      "wwwroot/css/simple-sidebar.css",
+      "wwwroot/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/DPlayer/DPlayer.bundle.js",
+    "inputFiles": [
+      "wwwroot/DPlayer/hls.js",
+      "wwwroot/DPlayer/DPlayer.min.js"
+    ]
+  }
+]

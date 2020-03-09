@@ -1,0 +1,251 @@
+﻿@page "{ArticalId}"
+@model Study.WebApp.Pages.Forum.ArticalDetailModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    ViewData[ConstStrings.Title] = Model.Artical.Title;
+    ViewData[ConstStrings.Keywords] = Model.Artical.Title;
+    ViewData[ConstStrings.Description] = Model.Artical.Title;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/Forum/Index">
+                <svg t="1566801503379" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2624" width="16" height="16"><path d="M793.738198 503.746012c-7.948019 0-14.411221 6.463202-14.411221 14.411221l0 317.92077c0 34.936697-28.428469 63.365166-63.365166 63.365166L604.033601 899.44317 604.033601 678.821423c0-7.948019-6.441713-14.411221-14.388708-14.411221L432.278819 664.410202c-7.948019 0-14.411221 6.463202-14.411221 14.411221l0 220.62277L305.918923 899.444193c-34.936697 0-63.343677-28.428469-63.343677-63.365166l0-317.92077c0-7.948019-6.441713-14.411221-14.411221-14.411221-7.948019 0-14.389732 6.463202-14.389732 14.411221l0 317.92077c0 50.832735 41.334407 92.187609 92.14463 92.187609l410.04391 0c50.831712 0 92.187609-41.354873 92.187609-92.187609l0-317.92077C808.149419 510.209214 801.68724 503.746012 793.738198 503.746012zM575.233672 899.422703 446.69004 899.422703 446.69004 693.232644l128.543631 0L575.233672 899.422703z" p-id="2625"></path><path d="M936.103626 397.124669l-104.131639-75.069743c-13.625322-9.891278-25.590841-33.211403-25.590841-49.91483L806.381146 148.661831c0-29.367865-23.88806-53.255924-53.234435-53.255924L716.573747 95.405907c-29.324886 0-53.169967 23.88806-53.169967 53.255924l0 41.028439c0 5.284353-1.24434 7.642051-1.375324 7.838525-0.436952 0-2.925632-0.152473-7.380084-3.384074L546.978141 116.455315c-13.057387-9.476839-23.603581-17.118889-25.874297-18.865673-2.793626-2.4017-6.615675-4.0175-10.174734-3.886517-3.341095-0.196475-7.270591 1.440815-10.04375 3.842515-2.489704 1.920746-15.524578 11.376095-30.896684 22.534226L85.863065 397.124669c-11.529591 8.340969-19.10615 20.677948-21.376866 34.761712-2.270716 14.083763 1.070378 28.167526 9.345856 39.587624l14.629185 20.35049c9.825786 13.690814 25.52535 21.50785 43.037189 21.50785l0.021489 0c1.833765 0 3.711532-0.086981 5.567809-0.261966 2.532683-0.240477 4.956895-1.157359 7.031137-2.642177L510.950599 245.741867l366.897228 264.686335c2.073218 1.484817 4.498454 2.4017 7.030114 2.642177 1.877767 0.174985 3.734044 0.261966 5.590322 0.261966 17.577331 0 33.255405-7.839549 42.927695-21.48636l14.694677-20.35049C965.297528 447.651436 959.904705 414.30905 936.103626 397.124669zM924.74902 454.617082l-14.760169 20.459984c-4.149507 5.808286-10.961656 9.236362-18.778692 9.454326L519.510556 216.372979l-0.021489 0.021489c-4.825912-3.51608-12.314467-3.64604-17.315364 0.174985L130.778021 484.531392c-7.839549-0.217964-14.694677-3.64604-18.931165-9.54233l-14.629185-20.394493c-3.799536-5.218862-5.328355-11.659551-4.279467-18.122753 1.025353-6.506181 4.498454-12.161994 9.781784-15.96153l384.16859-277.088806c11.311627-8.209986 18.888186-13.712303 24.040533-17.554818 4.38896 3.231601 10.524704 7.642051 19.126616 13.908778l107.757213 77.776388c8.123005 5.808286 16.266475 8.79941 24.215518 8.79941 15.023158 0 30.176276-11.332093 30.176276-36.660968l0-41.028439c0-13.471826 10.939143-24.433482 24.367991-24.433482l36.572964 0c13.45136 0 24.433482 10.961656 24.433482 24.433482l0 123.478266c0 25.852808 16.463973 58.037834 37.513382 73.257467L919.247726 420.510286C930.164357 428.392814 932.610058 443.699428 924.74902 454.617082z" p-id="2626"></path></svg>
+                学习坊
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="/Forum/Index/@Model.ClassificationInfo.Id">
+                @Model.ClassificationInfo.Name
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">正文</li>
+    </ol>
+</nav>
+
+<div id="app" style="display:none">
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <el-page-header @@back="goBack" content="@Model.Artical.Title">
+                    </el-page-header>
+                </div>
+                <div class="text item">
+                    <div class="row">
+                        <!--作者信息-->
+                        <div class="col-auto">
+                            <a href="/Forum/Author/@Model.Author.Id" class="text-muted">
+                                <img class="rounded-circle" src="@Configuration["Authority"]@Model.Author.Photo"
+                                     asp-append-version="true"
+                                     style="width:50px;height:50px" alt="">
+                            </a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="/Forum/Author/@Model.Author.Id" class="text-muted">@Model.Author.Name</a>
+                            <br />
+                            <span class="text-muted" style="font-size:12px">@Utility.DateTimeFormat.DateStringFromNow(Model.Artical.PublishTime)</span>
+                        </div>
+
+
+                        @*置顶文章*@
+                        <div class="col-auto" asp-authorize asp-policy="@Permisson.Article_SetTop">
+                            <form method="post" asp-page="/Forum/ArticalDetail" asp-page-handler="SetTop">
+                                <input type="hidden" name="articalId" value="@Model.Artical.Id" />
+                                @if (Model.Artical.IsSetTop)
+                                {
+                                    <input type="hidden" name="isSetTop" value="false" />
+                                    <input type="submit" value="取消置顶" class="btn btn-sm btn-info" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="isSetTop" value="true" />
+                                    <input type="submit" value="置顶" class="btn btn-sm btn-info" />
+                                }
+                            </form>
+                        </div>
+
+                        @*有Article_Delete权限或作者本人都可以删除文章*@
+                        @{
+                            var authDelete = await AuthorizationService.AuthorizeAsync(User, Permisson.Article_Delete);
+
+                            if (authDelete.Succeeded || Model.CurUserId == Model.Artical.UserId)
+                            {
+                                <div class="col-auto">
+                                    <form method="post" asp-page="/Forum/ArticalDetail" asp-page-handler="Delete">
+                                        <input type="hidden" name="articalId" value="@Model.Artical.Id" />
+                                        <input type="submit" value="删除" class="btn btn-sm btn-danger" />
+                                    </form>
+                                </div>
+                            }
+                        }
+
+
+
+                        @*作者本人可以修改自己的文章*@
+                        @if (Model.CurUserId == Model.Artical.UserId)
+                        {
+                            <div class="col">
+                                <a href="/Forum/PublishArtical/@Model.Artical.Id" class="btn btn-sm btn-primary">修改</a>
+                            </div>
+                        }
+                    </div>
+
+
+                    <p>
+                        @Html.Raw(Model.Artical.Content)
+                    </p>
+                </div>
+            </el-card>
+
+
+
+            <box title="@Model.Artical.Title" class-name="my-2">
+
+            </box>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <box>
+                @*挂广告*@
+                @Html.Raw((await Model.AdvertisementService.GetAdvertisementAsync()) ?? string.Empty)
+            </box>
+
+            <box title="作者最新" class-name="my-2">
+                <ol>
+                    @foreach (var a in Model.AuthorOtherArticals)
+                    {
+                        <li style="margin-top:10px"><a href="/Forum/ArticalDetail/@a.Id" class="text-decoration-none" style="color:#222222">@a.Title</a></li>
+                    }
+                </ol>
+            </box>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <box title="评论区  (@Model.CommentsCount) 评论" class-name="my-2">
+                @if (Model.IsLogin)
+                {
+                    var auth = await AuthorizationService.AuthorizeAsync(User, Permisson.Article_Comment_Create);
+                    if (auth.Succeeded)
+                    {
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <img class="img-fluid rounded-circle" style="width:32px;height:32px" src="@Configuration["Authority"]@Model.Picture" alt="">
+                                </div>
+                                <div class="col">
+                                    <textarea type="text" asp-for="addArticalCommentDto.CommentContent" class="form-control" placeholder="输入您的评论"></textarea>
+                                    <span asp-validation-for="addArticalCommentDto.CommentContent" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <input type="hidden" asp-for="addArticalCommentDto.ArticalId" value="@Model.ArticalId" />
+                            <input type="hidden" asp-for="addArticalCommentDto.CommenterId" value="@Model.CurUserId" />
+                            <div class="text-right">
+                                <input type="submit" class="btn btn-primary" value="评论" />
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>您没有权限发布评论哦</p>
+                    }
+                }
+                else
+                {
+                    <p><a href="/Account/Login">登录</a>后发表评论</p>
+                }
+                <hr />
+
+
+                @foreach (var comment in Model.Comments)
+                {
+                    var commenter = await UserClient.FindByIdAsync(new UserIdReq { UserId = comment.CommenterId });
+
+                    <div class="row">
+                        <div class="col-auto  mr-auto">
+                            <img class="img-fluid rounded-circle" style="width:32px;height:32px" src="@Configuration["Authority"]@commenter.Photo" alt="">
+                            @commenter.Name
+                        </div>
+                        <div class="col-auto">
+                            <span class="text-muted" style="font-size:12px">@Utility.DateTimeFormat.DateStringFromNow(comment.CommentTime)</span>
+                        </div>
+
+                    </div>
+                    <p>@comment.CommentContent</p>
+
+                    if (!string.IsNullOrEmpty(Model.CurUserId))
+                    {
+                        //评论者是我自己
+                        bool isCommenter = comment.CommenterId == Model.CurUserId;
+
+
+                        if (User.IsInRole(ConstStrings.Role_Admin) || isCommenter || Model.Artical.UserId == Model.CurUserId)
+                        {
+                            <form method="post" asp-page-handler="DeleteArticalComment">
+                                <input type="hidden" name="commentId" value="@comment.Id" />
+                                <div class="text-right">
+                                    <input type="submit" class="btn btn-sm btn-danger" value="删除" />
+                                </div>
+                            </form>
+                        }
+                    }
+                    <hr />
+                }
+            </box>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <partial name="_ValidateJsPartical" />
+    <script>
+        $(document).ready(function () {
+            $('form').ajaxForm({
+                beforeSubmit: function async(formData, jqForm, options) {
+                    if (options.url.indexOf("handler=Delete") != -1) {
+                        return confirm('您确定要删除吗？一旦确定将永久性删除')
+                    }
+                    else {
+                        return true
+                    }
+                },
+
+                success: function (responseText, statusText, xhr, $form) {
+                    //删除了文章
+                    if (statusText == "nocontent") {
+                        window.location.href = "/Forum/Index"
+                    } else {
+                        //添加评论
+                        window.location.reload()
+                    }
+                    //swal("成功", "添加评论", 'success')
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    console.log('进度百分比' + percentComplete)
+                },
+                error: function (errmsg) {
+                    swal("失败", JSON.stringify(errmsg.responseJSON), 'error')
+                }
+            });
+        });
+
+        var vue = new Vue({
+            el: "#app",
+            mounted: function () {
+                $("#app").removeAttr("style")
+            },
+            methods: {
+                goBack: function () {
+                    window.history.back()
+                }
+            }
+        })
+    </script>
+}

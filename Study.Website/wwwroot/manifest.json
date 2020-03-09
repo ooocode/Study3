@@ -1,0 +1,29 @@
+﻿{    
+  "name": "学习坊",    
+  "short_name": "学习坊",    
+  "description": "学习坊是交流技术的博客",    
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "168x168",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }   
+  ],    
+  "display": "standalone",    
+  "start_url": "/"    
+} 

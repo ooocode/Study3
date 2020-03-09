@@ -1,0 +1,80 @@
+﻿@page "{CourseId?}"
+@model Study.Website.Pages.Teacher.Course.AddOrUpdateCourseModel
+@{
+    ViewData["Title"] = "添加更新课程";
+}
+
+@{
+    var name = string.IsNullOrEmpty(Model.AddOrUpdateCourseDto.Id) ? "添加课程" : $"修改课程[{Model.AddOrUpdateCourseDto.Name}]";
+}
+
+<div id="app">
+    @*<nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/Teacher/Index">主页</a></li>
+                <li class="breadcrumb-item"><a href="/Teacher/Course/CourseList">我的课程列表</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@name</li>
+            </ol>
+        </nav>*@
+
+    <box>
+        <el-page-header @@back="goBack" content="@name">
+        </el-page-header>
+        <hr />
+        <el-form ref="form" label-width="80px" method="post">
+            <el-form-item label="">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="@Model.AddOrUpdateCourseDto.UserId" />
+                <input type="hidden" asp-for="@Model.AddOrUpdateCourseDto.Id" />
+            </el-form-item>
+
+            <el-form-item label="课程名称" required>
+                <input type="text" class="form-control" asp-for="@Model.AddOrUpdateCourseDto.Name" />
+                <span asp-validation-for="@Model.AddOrUpdateCourseDto.Name" class="text-danger"></span>
+            </el-form-item>
+
+            <el-form-item label="课程描述">
+                <textarea class="form-control" asp-for="@Model.AddOrUpdateCourseDto.Desc" rows="10"></textarea>
+                <span asp-validation-for="@Model.AddOrUpdateCourseDto.Desc" class="text-danger"></span>
+            </el-form-item>
+
+            <el-form-item label="">
+                <input type="submit" class="btn btn-primary" value="确定" />
+                <input type="button" class="btn btn-dark ml-3" value="取消" v-on:click="goBack" />
+            </el-form-item>
+
+        </el-form>
+    </box>
+
+</div>
+
+@section Scripts{
+    <script>
+        var vue = new Vue({
+            el: "#app",
+            mounted: function () {
+                var t = this;
+                $('form').ajaxForm({
+                    success: function (responseText, statusText, xhr, $form) {
+                        window.location.href = responseText
+                    },
+                    error: function (errmsg) {
+                        for (var i in errmsg.responseJSON) {
+                            t.$message({
+                                showClose: true,
+                                message: errmsg.responseJSON[i][0],
+                                type: 'error'
+                            });
+                        }
+                    }
+                });
+            },
+            methods: {
+                goBack: function () {
+                    window.location.href = "/Teacher/Course/CourseList"
+                }
+            }
+        })
+    </script>
+}

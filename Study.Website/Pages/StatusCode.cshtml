@@ -1,0 +1,29 @@
+﻿@page "{Code:int}"
+@{
+    ViewData["Title"] = Code;
+}
+
+@functions{
+    [FromRoute(Name = "Code")]
+    public int Code { get; set; }
+}
+
+@if (Code == 404)
+{
+    <div class="text-center">
+        <img src="~/images/404.png" class="img-fluid" asp-append-version="true" />
+        <p>很遗憾，您查找的资源不存在......</p>
+        <a href="/Forum/Index" class="btn btn-primary">回到论坛主页</a>
+        <a href="/Movie/Index" class="btn btn-info">回到视频主页</a>
+    </div>
+
+}
+else
+{
+    <div class="text-center">
+        <h1>Http错误状态码 @Code</h1>
+        <a href="/Forum/Index" class="btn btn-primary">回到论坛主页</a>
+        <a href="/Movie/Index" class="btn btn-info">回到视频主页</a>
+    </div>
+}
+

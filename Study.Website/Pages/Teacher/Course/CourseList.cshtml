@@ -1,0 +1,120 @@
+﻿@page
+@model Study.Website.Pages.Teacher.Course.CourseListModel
+@{
+    ViewData["Title"] = "我的课程列表";
+}
+
+<div id="app">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Teacher/Index">主页</a></li>
+            <li class="breadcrumb-item active" aria-current="page">我的课程列表</li>
+        </ol>
+    </nav>
+
+    <template>
+        <el-card class="box-card">
+            <div asp-authorize asp-policy="@Permissons.Permisson.Teacher_Course_CRUD">
+                <el-button onclick="window.location.href='/Teacher/Course/AddOrUpdateCourse'">
+                    <i class="el-icon-folder-add"></i>
+                    创建课程
+                </el-button>
+            </div>
+            <hr />
+
+            <el-table :data="tableData"
+                      v-loading="loading"
+                      style="width: 100%">
+
+                <el-table-column label="课程名称"
+                                 width="180">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>创建时间: {{ scope.row.addDateTime }}</p>
+                            <p>修改时间: {{ scope.row.lastModifyDatetime }}</p>
+                            <p>课程描述: {{ scope.row.desc }}</p>
+                            <div slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+
+                @*<el-table-column label="描述"
+                                 width="180">
+                    <template slot-scope="scope">
+
+                        <span style="margin-left: 10px">{{ scope.row.desc }}</span>
+                    </template>
+                </el-table-column>*@
+
+                <el-table-column label="创建时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">{{ scope.row.addDateTime }}</span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="修改时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">{{ scope.row.lastModifyDatetime }}</span>
+                    </template>
+                </el-table-column>
+
+
+                <el-table-column label="操作" asp-authorize asp-policy="@Permissons.Permisson.Teacher_Course_CRUD">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   @@click="handleEdit(scope.$index, scope.row.id)">编辑</el-button>
+                        <el-button size="mini"
+                                   type="danger"
+                                   @@click="handleDelete(scope.$index, scope.row.id)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+
+    </template>
+</div>
+
+
+@section Scripts{
+    @{
+       
+    }
+    <script>
+        var vue = new Vue({
+            el: "#app",
+            data: {
+                tableData: [],
+                loading: true
+            },
+            created: function () {
+                var t = this;
+                t.loading = true;
+                axios.get("?handler=LoadCourses").then(function (res) {
+                    t.tableData = res.data;
+                    t.loading = false;
+                }).catch(function (err) {
+                    t.loading = false;
+                    swal("发生错误：" + err);
+                });
+            },
+            methods: {
+                handleEdit(index, id) {
+                    console.log(index, id);
+                    window.location.href = "/Teacher/Course/AddOrUpdateCourse/"+ id
+                },
+                handleDelete(index, id) {
+                    console.log(index, id);
+                }
+            }
+        })
+    </script>
+}
+
+
+

@@ -1,0 +1,194 @@
+﻿@page "{ClassificationId?}"
+@model Study.WebApplication.Pages.Forum.IndexModel
+@{
+    if (Model.ArticalClassificationInfo != null)
+    {
+        ViewData[ConstStrings.Title] = Model.ArticalClassificationInfo.Name ?? "首页";
+    }
+    else
+    {
+        ViewData[ConstStrings.Title] = "首页";
+    }
+
+    ViewData[ConstStrings.Keywords] = "学习坊,编程技术,博客,数据库,数据结构与算法,AspNetCore," + Model.ArticalClassificationInfo?.Name ?? "";
+    ViewData[ConstStrings.Description] = "学习坊,编程技术,博客,数据库,数据结构与算法,AspNetCore," + Model.ArticalClassificationInfo?.Name ?? "";
+}
+
+
+<div class="row" id="app">
+    <div class="col-12 col-md-8">
+        <div asp-authorize asp-roles="@ConstStrings.Role_Student">
+            @{
+                string hadTaskNeedCompleteString = null;
+
+                //作业需要完成的
+                var studentUnCompletedTasks = await TaskService.GetStudentTasks().Where(e => e.StudentId == Model.CurUserId
+                        && e.IsAlreadyAnswered == false).ToListAsync();
+
+                foreach (var studentTask in studentUnCompletedTasks)
+                {
+                    var taskInfo = await TaskService.GetTeacherTaskByIdAsync(studentTask.TaskId);
+                    if (taskInfo != null)
+                    {
+                        if (DateTime.Now > taskInfo.TaskStartTime && DateTime.Now < taskInfo.TaskEndTime)
+                        {
+                            var date = taskInfo.TaskEndTime - DateTimeOffset.Now;
+                            hadTaskNeedCompleteString = hadTaskNeedCompleteString + $"【{taskInfo.TaskName}】 【{date.Days}天{date.Hours}时{date.Minutes}分】 后结束\r\n";
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(hadTaskNeedCompleteString))
+                {
+                    <!-- Then put toasts within -->
+                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="mr-auto">温馨提示作业未完成</strong>
+                            <small>@*@DateTimeOffset.Now*@</small>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="toast-body">
+                            @hadTaskNeedCompleteString<br><a href="/Student/Index" class="btn btn-outline-info btn-sm float-right">点击答题</a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <box>
+            @{
+                var path = HttpContext.Request.Path.Value;
+                var newestClass = (path.ToLower().Equals("/forum") || path.ToLower().Equals("/forum/index")) ?
+                    "bg-primary text-white" : "";
+            }
+
+            <ul class="nav mt-2">
+                <li class="nav-item">
+                    <a class="nav-link @newestClass" href="/Forum/Index">最新</a>
+                </li>
+                @{
+                    var classes = await ArticalService.GetArticalClassificationsAsync();
+                    var system = classes.FirstOrDefault(e => e.Name == "系统公告");
+
+                    if (system != null)
+                    {
+                        var className = path.EndsWith(system.Id.ToString()) ? "bg-primary text-white" : "";
+                        <li class="nav-item">
+                            <a class="nav-link @className" href="/Forum/Index/@system.Id">系统公告</a>
+                        </li>
+                    }
+
+
+                    foreach (var c in classes.Where(e => e.Name != "系统公告"))
+                    {
+                        var className = path.EndsWith(c.Id.ToString()) ? "bg-primary text-white" : "";
+                        <li class="nav-item">
+                            <a class="nav-link @className" href="/Forum/Index/@c.Id">@c.Name</a>
+                        </li>
+                    }
+
+                    <li asp-authorize class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">我的</a>
+                        <div class="dropdown-menu">
+                            <a href="/Forum/PublishArtical" asp-authorize asp-policy="@Permisson.Article_Create" class="dropdown-item">
+                                <svg t="1566700262856" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2861" width="16" height="16"><path d="M994.087177 219.337029l-108.036923 88.393846-468.906481 491.844731h-9.597594l-2.495375-0.543863-197.838417 69.90248L161.815765 828.592334l61.680541-209.451506 0.383904-1.983503v-11.61309l490.341108-470.282135L806.326234 26.905257a100.806735 100.806735 0 0 1 139.197114 0l48.691797 48.851756a103.973942 103.973942 0 0 1-0.127968 143.580016z m-745.189237 563.058883l86.378351-34.167437-57.585567-57.585567z m60.176918-153.561514l84.714768 84.970705L829.456437 274.267262 747.460988 191.951892z m638.559961-506.657019L899.102982 73.581559a32.919749 32.919749 0 0 0-46.420366 0L787.131045 138.909186l95.112163 95.40009 65.327627-65.487587a33.047717 33.047717 0 0 0 0.095976-46.548334zM498.659344 191.152093H158.712543A104.037925 104.037925 0 0 0 64.112252 281.81737v596.74644C64.112252 922.424817 114.947511 959.75946 158.712543 959.75946h594.730945a79.500075 79.500075 0 0 0 77.644541-81.131666V470.762015a31.991982 31.991982 0 1 1 63.983964 0v407.801795A133.854453 133.854453 0 0 1 753.443488 1023.743424H158.712543C71.278456 1023.743424 0.128288 966.317817 0.128288 878.56381V281.81737a155.321073 155.321073 0 0 1 158.584255-154.713225h339.946801a32.023974 32.023974 0 1 1 0 64.047948z" p-id="2862"></path></svg>
+                                写文章
+                            </a>
+                            <a href="/Forum/Author/@Model.CurUserId" class="dropdown-item">
+                                <svg t="1566700343883" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5553" width="16" height="16"><path d="M0 244.2V29.8C0 13.3 23.9 0 53.6 0h916.8c29.7 0 53.6 13.3 53.6 29.8v214.4c0 16.5-23.9 29.8-53.6 29.8H53.6C23.9 274 0 260.7 0 244.2zM0 619.2V404.8C0 388.3 23.9 375 53.6 375h916.8c29.7 0 53.6 13.3 53.6 29.8v214.4c0 16.5-23.9 29.8-53.6 29.8H53.6C23.9 649 0 635.7 0 619.2zM0 994.2V779.8C0 763.3 23.9 750 53.6 750h916.8c29.7 0 53.6 13.3 53.6 29.8v214.4c0 16.5-23.9 29.8-53.6 29.8H53.6C23.9 1024 0 1010.7 0 994.2z" p-id="5554"></path></svg>
+                                我的文章
+                            </a>
+
+                            <a asp-authorize asp-policy="@Permisson.Article_ManagerTypes" href="/Forum/ArticalClassificationManage" class="dropdown-item">
+                                <svg t="1566700343883" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5553" width="16" height="16"><path d="M0 244.2V29.8C0 13.3 23.9 0 53.6 0h916.8c29.7 0 53.6 13.3 53.6 29.8v214.4c0 16.5-23.9 29.8-53.6 29.8H53.6C23.9 274 0 260.7 0 244.2zM0 619.2V404.8C0 388.3 23.9 375 53.6 375h916.8c29.7 0 53.6 13.3 53.6 29.8v214.4c0 16.5-23.9 29.8-53.6 29.8H53.6C23.9 649 0 635.7 0 619.2zM0 994.2V779.8C0 763.3 23.9 750 53.6 750h916.8c29.7 0 53.6 13.3 53.6 29.8v214.4c0 16.5-23.9 29.8-53.6 29.8H53.6C23.9 1024 0 1010.7 0 994.2z" p-id="5554"></path></svg>
+                                分类管理
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </box>
+
+
+        <box class-name="mt-2">
+            <div v-for="artical in articals">
+                <div v-html="artical"></div>
+            </div>
+            <img v-if="isShowLoading" src="~/images/loading.gif" class="img-fluid" />
+            <button v-on:click="loadArticals()" class="btn btn-outline-primary btn-block">加载更多</button>
+        </box>
+    </div>
+
+
+    <div class="col-12 col-md-4">
+        <box>
+            @*挂广告*@
+            @Html.Raw((await Model.AdvertisementService.GetAdvertisementAsync()) ?? string.Empty)
+        </box>
+
+
+        <box title="阅读最多" class-name="mt-2">
+            <ol>
+                @foreach (var a in Model.mostVisitArtical)
+                {
+                    <li style="margin-top:10px">
+                        <a href="/Forum/ArticalDetail/@a.Id" style="color:#222222" class="text-decoration-none">@a.Title</a>
+                    </li>
+                }
+            </ol>
+        </box>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="https://cdn.bootcss.com/vue-router/3.1.3/vue-router.min.js"></script>
+    <script>
+        $('.toast').toast({
+            autohide: false
+        })
+        $('.toast').toast('show');
+    </script>
+
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                isShowLoading: false,
+                skinCount: 0,
+                articals:[]
+            },
+
+            created: function () {
+                this.loadArticals()
+            },
+
+
+            mounted: function () {
+               $("#app").removeAttr("style")
+            },
+
+            methods: {
+                loadArticals: function () {
+                    this.isShowLoading = true
+                    var url = '/Forum/Index/@Model.ClassificationId?handler=LoadArticals&skipCount='
+                        + this.skinCount.toString() + '&ClassificationId'
+                        + '@Model.ClassificationId' + '&_t'
+                        + Date.now()
+
+                    var t = this
+                    axios.get(url).then(function (response) {
+                          t.articals.push(response.data)
+                          t.skinCount += @this.Model.TakeCount
+                          t.isShowLoading = false
+                    })
+
+                }
+            }
+        })
+    </script>
+}

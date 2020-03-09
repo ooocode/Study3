@@ -1,0 +1,119 @@
+﻿@model string
+
+@{
+    var taskId = Model;
+    var task = await TaskService.GetTeacherTaskByIdAsync(taskId);
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Teacher/Index">主页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">全校班级</li>
+    </ol>
+</nav>
+
+<modal id="taskContent" title="@task.TaskName">
+    <div class="row">
+        <div class="col-12">
+            @Html.Raw(task.TaskContent)
+        </div>
+    </div>
+</modal>
+
+<table>
+    <tbody>
+        <tr>
+            <td>作业名称</td>
+            <td>@task.TaskName</td>
+        </tr>
+
+        <tr>
+            <td>开始时间</td>
+            <td>@task.TaskStartTime</td>
+        </tr>
+
+        <tr>
+            <td>结束时间</td>
+            <td>@task.TaskEndTime</td>
+        </tr>
+
+        <tr>
+            <td>
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#taskContent">
+                    查看作业内容
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table id="studentTable">
+    @{
+
+
+    }
+    <thead>
+        <tr>
+            <th>学号</th>
+            <th>姓名</th>
+            <th>是否答题</th>
+            <th>是否批改</th>
+            <th>成绩</th>
+        </tr>
+    </thead>
+
+    @*<tbody>*@
+    @*@foreach (var studentTask in studentTasks)
+        {
+            var studentInfo = await UserService.FindByIdAsync(studentTask.StudentId);
+            <tr>
+                <td>@studentInfo.Account</td>
+                <td>@studentInfo.Name</td>
+                @if (studentTask.IsAlreadyAnswered)
+                {
+                    <td>已答题</td>
+                }
+                else
+                {
+                    <td>未答题</td>
+                }
+
+                @if (studentTask.IsTeacherModified)
+                {
+                    <td>已批改</td>
+                }
+                else
+                {
+                    <td>未答题</td>
+                }
+
+                <td>@studentTask.Grade</td>
+            </tr>
+        }*@
+    @*</tbody>*@
+</table>
+
+<script>
+    $('#studentTable').bootstrapTable({
+        url: '/Teacher/Tasks?handler=StudentTasks&taskId=@taskId',
+        pagination: true,
+        //search: true,
+        sidePagination:"server",
+        columns: [{
+            field: 'Account',
+            title: '学号'
+        }, {
+            field: 'Name',
+            title: '姓名'
+        }, {
+            field: 'IsAlreadyAnswered',
+            title: '是否答题'
+        }, {
+            field: 'IsTeacherModified',
+            title: '是否批改'
+        }, {
+            field: 'Grade',
+            title: '成绩'
+        }]
+    })
+</script>

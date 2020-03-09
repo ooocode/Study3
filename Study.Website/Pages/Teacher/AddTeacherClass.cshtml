@@ -1,0 +1,57 @@
+﻿@page
+@model Study.Website.Pages.Teacher.AddTeacherClassModel
+@{
+    ViewData["Title"] = "添加班级";
+}
+
+
+<ol class="breadcrumb">
+    <li><a href="#">教师后台</a></li>
+    <li class="active">添加班级</li>
+</ol>
+
+
+
+<box3 title="学校全部班级">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>名称</th>
+                <th>添加</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var sc in Model.SchoolClasses)
+            {
+
+                <tr>
+                    <td>@sc.Name</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="addClasses('@sc.Id')">添加</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</box3>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('table').DataTable()
+        })
+
+        function addClasses(classid) {
+            axios.post("/Teacher/AddTeacherClass?handler=AddTeacherClass", {
+                ClassId: classid,
+                TeacherId:''
+            }).then(function (res) {
+                window.location.reload()
+            }).catch(function (err) {
+                console.log(err)
+            })
+        }
+    </script>
+}

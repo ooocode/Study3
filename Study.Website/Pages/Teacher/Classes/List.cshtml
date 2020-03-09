@@ -1,0 +1,122 @@
+﻿@page
+@model Study.Website.Pages.Teacher.Classes.ListModel
+@{
+    ViewData["Title"] = "我的班级";
+}
+
+
+<div id="app">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Teacher/Index">主页</a></li>
+            <li class="breadcrumb-item active" aria-current="page">我的班级列表</li>
+        </ol>
+    </nav>
+
+    <template>
+        <el-card class="box-card">
+            <div>
+                <el-button onclick="window.location.href='/Teacher/Classes/SchoolClasses'">
+                    <i class="el-icon-folder-add"></i>
+                    添加班级
+                </el-button>
+            </div>
+            <hr />
+
+            <el-table :data="tableData"
+                      v-loading="loading"
+                      style="width: 100%">
+
+                <el-table-column label="班级名称"
+                                 width="180">
+                    <template slot-scope="scope">
+                        <el-popover trigger="hover" placement="top">
+                            <p>班级id: {{ scope.row.id }}</p>
+                            <p>描述: {{ scope.row.desc }}</p>
+                            <div slot="reference" class="name-wrapper">
+                                <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                            </div>
+                        </el-popover>
+                    </template>
+                </el-table-column>
+
+
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   @@click="handleEdit(scope.$index, scope.row.id)">查看班级下的学生</el-button>
+                        <el-button size="mini"
+                                   type="danger"
+                                   @@click="deleteClassFunc(scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+
+    </template>
+</div>
+
+
+@section Scripts{
+    <script>
+        var vue = new Vue({
+            el: "#app",
+            data: {
+                tableData: [],
+                loading: true
+            },
+            created: function () {
+                this.loadClasses()
+            },
+            methods: {
+                loadClasses: function () {
+                    var t = this;
+                    t.loading = true;
+                    axios.get("?handler=LoadClasses").then(function (res) {
+                        t.tableData = res.data;
+                        t.loading = false;
+                        console.log(t.tableData)
+                    }).catch(function (err) {
+                        t.loading = false;
+                        swal("发生错误：" + err);
+                    });
+                },
+
+                handleEdit(index, id) {
+                    console.log(index, id);
+                    window.location.href = "/Teacher/Classes/StudentsOfClass/" + id
+                },
+
+                //删除班级
+                deleteClassFunc(delClass) {
+                    var t = this
+                    this.$prompt('输入  [ ' + delClass.name + ' ]  确认删除', '确认删除班级吗？', {
+                        inputPlaceholder: delClass.name,
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        inputErrorMessage: '无效的输入'
+                    }).then(({ value }) => {
+                        if (value) {
+                            axios.post("?handler=DeleteTeacherClass",
+                                {
+                                    ClassId: delClass.id,
+                                    ClassName: value
+                                })
+                                .then(function (res) {
+                                    t.loadClasses()
+                                    t.$message({
+                                        message: '成功删除班级',
+                                        type: 'success'
+                                    });
+                                })
+                                .catch(function (err) {
+                                    t.$message.error(JSON.stringify(err.response.data));
+                                })
+
+                        }
+                    });
+                }
+            }
+        })
+    </script>
+}

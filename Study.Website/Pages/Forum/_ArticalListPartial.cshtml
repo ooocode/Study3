@@ -1,0 +1,71 @@
+﻿@model IList<ArticalDto>
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@if (Model.Count == 0)
+{
+    @*<p>没有更多内容啦</p>*@
+}
+else
+{
+    foreach (var artical in Model)
+    {
+        <div class="row">
+            <div class="col">
+                @if (!artical.IsSetTop)
+                {
+                    <a asp-page="ArticalDetail" asp-route-ArticalId="@artical.Id" class="text-decoration-none font-weight-bolder" style="font-size:18px;color:#222222">
+                        @artical.Title
+                    </a>
+                }
+                else
+                {
+                    <button class="btn btn-outline-warning btn-sm p-0">置顶</button>
+                    <a asp-page="ArticalDetail" asp-route-ArticalId="@artical.Id" class="text-decoration-none font-weight-bolder" style="font-size:18px;color:red">
+                        @artical.Title
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="row my-3" style="font-size:14px">
+            <div class="col-auto">
+                <a href="/Forum/Index/@artical.ClassificationId" class="btn btn-outline-primary btn-sm text-muted p-0" style="font-size:12px;">
+                    @{
+                        //获取分类名称
+                        var classificationName = (await ArticalService.GetArticalClassificationByIdAsync(artical.ClassificationId)).Name;
+                    }
+                    @classificationName
+                </a>
+            </div>
+
+            <div class="col-auto">
+                <!--作者信息-->
+                @{
+                    try
+                    {
+                        var author = await UserClient.FindByIdAsync(new UserIdReq { UserId = artical.UserId });
+                        if (!string.IsNullOrEmpty(author.Photo))
+                        {
+                            <img src="@Configuration["Authority"]@author.Photo" asp-append-version="true" class="img-fluid rounded-circle" style="width:20px;height:20px" alt="">
+                        }
+
+                        <a href="/Forum/Author/@author.Id" class="text-muted text-decoration-none">
+                            @author.Name
+                        </a>
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+
+                ⋅&nbsp;
+                <!--评论数量-->
+                @(await ArticalService.GetArticalComments(artical.Id).CountAsync())评论&nbsp;⋅
+
+                <!--发布时间-->
+                @DateTimeFormat.DateStringFromNow(artical.PublishTime)
+            </div>
+        </div>
+        <hr />
+    }
+}

@@ -1,0 +1,29 @@
+﻿@page
+@model Study.Website.Pages.Teacher.Tasks.TasksModel
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+<div id="app">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Teacher/Index">主页</a></li>
+            <li class="breadcrumb-item active" aria-current="page">作业管理</li>
+        </ol>
+    </nav>
+</div>
+
+@section Scripts{
+
+    <script>
+        var vue = new Vue({
+            el: "#app",
+            data: {
+
+            }
+        })
+
+    </script>
+}
+
+

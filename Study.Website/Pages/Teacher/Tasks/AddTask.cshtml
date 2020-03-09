@@ -1,0 +1,374 @@
+﻿@page "{TaskId?}"
+@model Study.WebApp.Pages.Teacher.AddTaskModel
+@{
+    string title = null;
+    if (string.IsNullOrEmpty(Model.TaskId))
+    {
+        title = "添加作业";
+
+    }
+    else
+    {
+        title = "修改作业信息";
+    }
+
+    ViewData[ConstStrings.Title] = title;
+}
+
+@section Head{
+    @*<link rel="stylesheet" href="~/dropzone/dropzone.min.css" />*@
+    <!-- 1. Add CSS to `<head>` -->
+    <link href="~/uppy.min.css" rel="stylesheet">
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Teacher/Index">主页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@title</li>
+    </ol>
+</nav>
+
+<div id="app" style="display:none">
+    <div v-loading="loading"
+         element-loading-text="拼命加载中"
+         element-loading-spinner="el-icon-loading">
+        <box>
+            <el-page-header @@back="goBack" content="@title">
+            </el-page-header>
+
+            <hr />
+
+
+            <el-form label-width="170px" method="post">
+
+                <el-form-item>
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input asp-for="AddOrUpdateTeacherTaskDto.TaskId" type="hidden" />
+                </el-form-item>
+
+                <el-form-item label="作业名称" required>
+                    @{
+                        <input type="text" class="form-control" asp-for="AddOrUpdateTeacherTaskDto.TaskName" />
+                        <span asp-validation-for="AddOrUpdateTeacherTaskDto.TaskName" class="text-danger"></span>
+                    }
+                </el-form-item>
+
+
+                <el-form-item label="课程选择" required>
+
+                    <select class="custom-select" asp-for="@Model.AddOrUpdateTeacherTaskDto.CourseId">
+                        <option value=""></option>
+                        @foreach (var tc in Model.TeacherCourses)
+                        {
+
+                            <option value="@tc.Id">@tc.Name</option>
+                        }
+                    </select>
+
+                    <span asp-validation-for="@Model.AddOrUpdateTeacherTaskDto.CourseId" class="text-danger"></span>
+                </el-form-item>
+
+                <el-form-item label="开始时间" required>
+                    <input class="datetimepicker" asp-for="AddOrUpdateTeacherTaskDto.TaskStartTime" />
+                    <span asp-validation-for="AddOrUpdateTeacherTaskDto.TaskStartTime" class="text-danger"></span>
+                </el-form-item>
+
+                <el-form-item label="结束时间" required>
+                    <input class="datetimepicker" asp-for="AddOrUpdateTeacherTaskDto.TaskEndTime" />
+                    <span asp-validation-for="AddOrUpdateTeacherTaskDto.TaskEndTime" class="text-danger"></span>
+                </el-form-item>
+
+                <el-form-item label="(可选)协助改作业">
+                    <!--助手id  帮改作业的-->
+                    <select class="custom-select" asp-for="@Model.AddOrUpdateTeacherTaskDto.HelperId">
+                        <option value=""></option>
+                        @{
+                            var myFriends = await UserService.GetUserFriends(Model.CurUserId).ToListAsync();
+
+                            foreach (var friendId in myFriends)
+                            {
+                                try
+                                {
+                                    var friendInfo = await UserClient.FindByIdAsync(new UserIdReq { UserId = friendId });
+                                    <option value="@friendInfo.Id"> @($"姓名：{friendInfo.Name}") &nbsp;&nbsp;&nbsp;&nbsp;@($"账号：{friendInfo.UserName}")</option>
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                            }
+                        }
+                    </select>
+                </el-form-item>
+
+                @*如果是修改作业则不显示班级*@
+                @if (string.IsNullOrEmpty(Model.AddOrUpdateTeacherTaskDto.TaskId))
+                {
+                    <el-form-item label="发布到的班级,可以多选" required>
+                        <el-checkbox-group v-model="classIds" @@change="change">
+                            @foreach (var c in Model.TeacherClasses)
+                            {
+                                var classInfo = await UserClient.GetSchoolClassByIdAsync(new IdReq { Id = c });
+                                <el-checkbox value="@classInfo.Id" label="@classInfo.Name" name="type"></el-checkbox>
+                            }
+                        </el-checkbox-group>
+
+                        <input type="hidden" asp-for="AddOrUpdateTeacherTaskDto.StudentIds">
+                        <span asp-validation-for="AddOrUpdateTeacherTaskDto.StudentIds" class="text-danger"></span>
+                    </el-form-item>
+                }
+
+
+                <el-form-item label="附件（最多上传10个文件，每个最大200MB）">
+                    <ol>
+                        <li v-for="file in files">
+                            <a :href="file.url" target="_blank">
+                                <i class="el-icon-paperclip"></i>
+                                {{file.name}}
+                            </a>
+                            <span style="cursor:pointer" v-on:click="deleteFile(file.id)" class="text-danger ml-3">
+                                <i class="el-icon-delete"></i>删除
+                            </span>
+                        </li>
+                    </ol>
+
+
+                    <div id="UppyDragDrop"></div>
+                    <input type="hidden" asp-for="AddOrUpdateTeacherTaskDto.Files" />
+                </el-form-item>
+
+
+                <el-form-item label="作业内容" required>
+                    <textarea class="summernote" asp-for="AddOrUpdateTeacherTaskDto.TaskContent"></textarea>
+                </el-form-item>
+
+
+                <el-form-item>
+                    <el-button type="primary" v-on:click="submit()">@title</el-button>
+                    <el-button v-on:click="goBack">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </box>
+    </div>
+
+    <!-- 3. Initialize -->
+
+</div>
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@section Scripts{
+    @*<script src="~/dropzone/dropzone.min.js"></script>*@
+    <!-- 2. Add JS before the closing `</body>` -->
+    <script src="~/uppy.min.js"></script>
+
+    <script>
+        var zhcn = {
+            strings: {
+                // When `inline: false`, used as the screen reader label for the button that closes the modal.
+                closeModal: '关闭弹框',
+                // Used as the screen reader label for the plus (+) button that shows the “Add more files” screen
+                addMoreFiles: '添加更多文件',
+                // Used as the header for import panels, e.g., “Import from Google Drive”.
+                importFrom: '从 %{name} 导入',
+                // When `inline: false`, used as the screen reader label for the dashboard modal.
+                dashboardWindowTitle: 'Uppy Dashboard Window (Press escape to close)',
+                // When `inline: true`, used as the screen reader label for the dashboard area.
+                dashboardTitle: 'Uppy Dashboard',
+                // Shown in the Informer when a link to a file was copied to the clipboard.
+                copyLinkToClipboardSuccess: '链接已复制',
+                // Used when a link cannot be copied automatically — the user has to select the text from the
+                // input element below this string.
+                copyLinkToClipboardFallback: '复制下面的链接',
+                // Used as the hover title and screen reader label for buttons that copy a file link.
+                copyLink: '复制链接',
+                // Used as the hover title and screen reader label for file source icons, e.g., “File source: Dropbox”.
+                fileSource: '文件来源: %{name}',
+                // Used as the label for buttons that accept and close panels (remote providers or metadata editor)
+                done: '完成',
+                // Used as the screen reader label for buttons that remove a file.
+                removeFile: '移除文件',
+                // Used as the screen reader label for buttons that open the metadata editor panel for a file.
+                editFile: '编辑文件',
+                // Shown in the panel header for the metadata editor. Rendered as “Editing image.png”.
+                editing: '正在编辑 %{file}',
+                // Text for a button shown on the file preview, used to edit file metadata
+                edit: '编辑',
+                // Used as the screen reader label for the button that saves metadata edits and returns to the
+                // file list view.
+                finishEditingFile: '结束编辑文件',
+                // Used as the label for the tab button that opens the system file selection dialog.
+                myDevice: '我的设备',
+                // Shown in the main dashboard area when no files have been selected, and one or more
+                // remote provider plugins are in use. %{browse} is replaced with a link that opens the system
+                // file selection dialog.
+                dropPasteImport: 'Drop files here, paste, %{browse} or import from',
+                // Shown in the main dashboard area when no files have been selected, and no provider
+                // plugins are in use. %{browse} is replaced with a link that opens the system
+                // file selection dialog.
+                dropPaste: '拖拽文件到这里 或者 %{browse}',
+                // This string is clickable and opens the system file selection dialog.
+                browse: '浏览本地文件',
+                // Used as the hover text and screen reader label for file progress indicators when
+                // they have been fully uploaded.
+                uploadComplete: '上传完成',
+                // Used as the hover text and screen reader label for the buttons to resume paused uploads.
+                resumeUpload: '继续',
+                // Used as the hover text and screen reader label for the buttons to pause uploads.
+                pauseUpload: '暂停',
+                // Used as the hover text and screen reader label for the buttons to retry failed uploads.
+                retryUpload: '重试',
+                addMore: '添加更多',
+                back: '返回',
+                cancel: '取消',
+                // Used in a title, how many files are currently selected
+                xFilesSelected: {
+                    0: '%{smart_count} 个文件已选择',
+                    1: '%{smart_count} 个文件已选择'
+                },
+
+                // uppy/status-bar strings:
+                uploading: '上传中...',
+                complete: '完成'
+                // ...etc
+            }
+        };
+    </script>
+
+
+    <script>
+        var vue = new Vue({
+            el: "#app",
+            data: {
+                helperId: "",
+                courseId: "",
+                classIds: [],
+                loading: false,
+                files: [],
+                uppy:''
+            },
+            created: function () {
+                var v = '@Html.Raw(Model.AddOrUpdateTeacherTaskDto.Files)'
+                if (v !== "") {
+                    var ls = JSON.parse(v);
+                    this.files = ls
+                }
+            },
+
+            mounted: function () {
+                jQuery.datetimepicker.setLocale('zh');
+                jQuery('.datetimepicker').datetimepicker();
+                initSummernote('.summernote')
+                this.initUppy()
+
+                var t = this
+                $('form').ajaxForm({
+                    beforeSubmit: function (formData, jqForm, options) {
+                        var ret = false;
+                        if ($('.summernote').summernote('isEmpty')) {
+                            t.$message({
+                                showClose: true,
+                                message: "作业内容不能为空",
+                                type: 'error'
+                            });
+                            return false;
+                        }
+
+                        t.loading = true
+                        return true
+                    },
+
+                    success: function (responseText, statusText, xhr, $form) {
+                        t.loading = false
+                        window.location.href = responseText
+                    },
+                    error: function (errmsg) {
+                        t.loading = false
+                        for (var i in errmsg.responseJSON) {
+                            t.$message({
+                                showClose: true,
+                                message: errmsg.responseJSON[i][0],
+                                type: 'error'
+                            });
+                        }
+                    }
+                });
+
+                $("#app").attr("style", "")
+            },
+
+            methods: {
+                change: function (val) {
+                    console.log(val)
+                    $("#AddOrUpdateTeacherTaskDto_StudentIds").val(val.join())
+                },
+
+                //删除附件
+                deleteFile: function (id) {
+
+                    var index = this.files.findIndex(text => text.id === id);
+
+                    this.files.splice(index, 1)
+
+                    this.uppy.removeFile(id)
+                },
+
+
+
+
+                initUppy: function () {
+                   var t = this
+                     t.uppy = Uppy.Core({
+                        autoProceed: true,
+                        restrictions: {
+                        maxFileSize: @(int.Parse(Configuration["TusFileSizeOfM"]) * 1024 * 1024),
+                        maxNumberOfFiles: 10
+                        },
+                    })
+                    .use(Uppy.Dashboard, {
+                        inline: true,
+                        target: '#UppyDragDrop',
+                        locale: zhcn,
+                        height: 200,
+                        showSelectedFiles:false
+                    })
+                    .use(Uppy.Tus, { endpoint: '/TusFiles' })
+
+
+                     t.uppy.on('upload-success', (file, response) => {
+                        t.files.push({id:file.id,name:file.name,url:response.uploadURL})
+                    })
+
+                    t.uppy.on('upload-error', (file, error, response) => {
+                        swal(error)
+                        console.log('error with file:', file.id)
+                        console.log('error message:', error)
+                    })
+                },
+
+                submit: function () {
+                    $('#AddOrUpdateTeacherTaskDto_Files').val(JSON.stringify(this.files))
+                    $('form').submit()
+                },
+
+                goBack: function () {
+                    @{
+                        string retUrl = null;
+                        if (string.IsNullOrEmpty(Model.TaskId))
+                        {
+                            retUrl = "/Teacher/Index";
+                        }
+                        else
+                        {
+                             retUrl = $"/Teacher/Tasks/TaskDetail/{Model.TaskId}";
+                        }
+                    }
+                    window.location.href = "@retUrl"
+                }
+            }
+        })
+    </script>
+
+
+}

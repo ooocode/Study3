@@ -1,0 +1,52 @@
+﻿@page
+
+@model Study.Website.Pages.Index1Model
+
+@{
+    ViewData["Title"] = "主页";
+    Layout = null;
+}
+
+@*<div class="jumbotron" style="margin-top:60px">
+    <h1 class="display-4">学习坊</h1>
+    <p class="lead"></p>
+    <hr class="my-4">
+    <p></p>
+    <a class="btn btn-primary btn-lg" href="/Forum/Index" role="button">了解更多</a>
+</div>*@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/forum/index" asp-authorize asp-policy="fff">学习坊</a>
+    <a href="/forum/index" asp-authorize asp-policy="xxxxxxxx">学习坊</a>
+    index1
+</body>
+</html>
+
+
+
+
+@functions{
+    //public void OnGet(/*[FromServices] Study.Database.UserDatabaseContext db*/)
+    //{
+
+    //    for (int i = 0; i < 300; i++)
+    //    {
+    //        Thread t = new Thread((m) =>
+    //        {
+    //            dynamic mm = m as dynamic;
+    //            MovieParser parser = new MovieParser(/*mm.database*/);
+    //            parser.ThreadFunc(mm.index * 1000, mm.index * 1000 + 999).Wait();
+    //        });
+
+    //        t.Start(new { index = i/*, database = db */});
+    //    }
+    //}
+}

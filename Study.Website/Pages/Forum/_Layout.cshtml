@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1.0, user-scalable=0">
+    <title>@Html.Raw(ViewData[ConstStrings.Title] ?? string.Empty) - 学习坊</title>
+    <meta name="@ConstStrings.Keywords" content="@Html.Raw(ViewData[ConstStrings.Keywords]??string.Empty)" />
+    <meta name="@ConstStrings.Description" content="@Html.Raw(ViewData[ConstStrings.Description]??string.Empty)" />
+
+    <!--google浏览器禁止https混合http  所以要加上这一行-->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <!-- Bootstrap CSS -->
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    </environment>
+    <environment exclude="Development">
+        <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    </environment>
+
+
+    <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/element-ui/theme-chalk/index.css">
+
+    @RenderSection("head", required: false)
+    <!--谷歌广告-->
+    @*<environment exclude="Development">
+            <partial name="_GoogleAdPartical">
+        </environment>*@
+</head>
+
+<body style="overflow-x:hidden;background-color:rgb(248,249,250)">
+    @*<mini-profiler />*@
+   
+    <div>
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 fixed-top">
+                <div class="container">
+                    <div>
+                        <a class="navbar-brand" href="/">
+                            <img src="~/logo.png" class="img-fluid" style="width:80px" asp-append-version="true"/>
+                        </a>
+
+                        <a href="/Student/Index" asp-authorize asp-roles="@ConstStrings.Role_Student" class="text-dark ml-2" style="font-size:16px">
+                            学生后台
+                        </a>
+
+                        <a href="/Teacher/Index" asp-authorize asp-policy="@Permissons.Permisson.Enter_Teacher" class="text-dark ml-2" style="font-size:16px">
+                            教师后台
+                        </a>
+
+                        <a href="https://zwovo.xyz:9999" asp-authorize asp-policy="@Permisson.Enter_Admin" class="text-dark ml-2" target="_blank" style="font-size:16px">
+                            管理员后台
+                        </a>
+                    </div>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <ul class="navbar-nav">
+                            <li asp-authorize asp-policy="@Permisson.Article_Create" class="nav-item">
+                                <a href="/Forum/PublishArtical" class="nav-link text-dark">
+                                    <i class="el-icon-edit"></i>
+                                    写文章
+                                </a>
+                            </li>
+
+                            <li asp-authorize class="nav-item">
+                                <a href="https://zwovo.xyz:9999/Account/UpdateInfo" class="nav-link text-dark" title="个人中心" target="_blank">
+                                    @User.Identity.Name
+                                </a>
+                            </li>
+
+                            <li asp-authorize class="nav-item">
+                                <a asp-action="Logout" asp-controller="Account" class="nav-link text-dark">注销</a>
+                            </li>
+
+
+                            @{
+                                var isAuthenticated = User?.Identity?.IsAuthenticated;
+                            }
+                            @if (!isAuthenticated.HasValue || isAuthenticated.Value == false)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-action="Login" asp-controller="Account">登录</a>
+                                </li>
+                            }
+
+                            <li asp-authorize asp-policy="@Permisson.WebDisk" class="nav-item">
+                                <a href="https://zwovo.xyz:5000" target="_blank" class="nav-link text-dark">
+                                    个人网盘
+                                </a>
+                            </li>
+
+                            <li asp-authorize asp-policy="@Permisson.Adv" class="nav-item">
+                                <a asp-page="/Advertisement" class="nav-link text-dark">
+                                    广告
+                                </a>
+                            </li>
+
+                            <li asp-authorize asp-policy="@Permisson.LookLog" class="nav-item">
+                                <a href="/LogDashboard" target="_blank" class="nav-link text-dark">
+                                    系统日志
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a asp-page="/Forum/About" class="nav-link text-dark">
+                                    关于
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container" style="margin-top:75px">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+
+        <!--页脚-->
+        <partial name="./Shared/_Footer.cshtml" />
+
+        <a class="to-top" style="opacity:0.8;display:none">
+            <svg t="1566700909250" class="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9528" width="32" height="32"><path d="M512.71932 73.09934c241.717266 0 439.476629 197.211553 439.476629 438.247896 0 241.036343-197.790082 438.206939-439.476629 438.206939-241.717266 0-439.476629-197.170596-439.476628-438.212059 0-241.036343 197.759363-438.247896 439.476628-438.247896m0-73.037903C227.039033 0.056317 0 233.786822 0 511.342116c0 277.524576 227.039033 511.255081 512.71932 511.255081 285.680288 0 512.688602-226.393948 512.688603-511.255081C1025.413042 226.450265 798.404728 0.056317 512.72444 0.056317z m51.233023 803.416932v-394.423107l175.81113 175.334997 65.911255-73.037903-292.950288-292.166971L219.738314 511.342116l65.941974 73.037903 175.739454-175.329877v394.423107h102.532601z" p-id="9529" fill="#1296db"></path></svg>
+        </a>
+    </div>
+
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    </environment>
+
+    <environment exclude="Development">
+        <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js">
+        </script>
+
+        <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.bootstrap"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js">
+        </script>
+    </environment>
+
+
+
+    <environment include="Development">
+        <script src="~/js/jquery.lazyload.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.js"
+                asp-fallback-test="$().lazyload"
+                asp-fallback-src="~/js/jquery.lazyload.min.js">
+        </script>
+    </environment>
+
+
+    <!--axios-->
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"
+            asp-fallback-test="window.axios"
+            asp-fallback-src="~/axios.min.js"></script>
+
+
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"
+            asp-fallback-test="window.Vue"
+            asp-fallback-src="~/js/vue.min.js"></script>
+
+
+    <environment include="Development">
+        <script src="~/js/sweetalert.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdn.bootcss.com/sweetalert/2.1.2/sweetalert.min.js"
+                asp-fallback-test="window.sweetAlert"
+                asp-fallback-src="~/js/sweetalert.min.js">
+        </script>
+    </environment>
+
+
+
+    <!--markdown语法转html-->
+    @*<script src="https://cdn.bootcss.com/marked/0.7.0/marked.min.js"></script>*@
+
+
+    <script src="~/js/jquery.toTop.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- element ui -->
+    <script src="~/lib/element-ui/index.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        $(function () {
+            $('.to-top').toTop({
+                //options with default values
+                autohide: true,
+                offset: 100,
+                speed: 500,
+                position: true,
+                right: 15,
+                bottom: 30
+            });
+
+            $("img").lazyload();
+        });
+    </script>
+</body>
+</html>

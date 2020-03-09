@@ -1,0 +1,162 @@
+﻿@page
+@model Study.Website.Pages.Movie.Admin.TypesManagerModel
+@{
+    ViewData["Title"] = "分类管理";
+}
+<script type="text/javascript" src="~/jstree/tree.min.js"></script>
+<link rel="stylesheet" href="~/jstree/tree.min.css">
+
+
+<box title="分类管理">
+
+
+    <div class="row ">
+        <div class="col">
+            <div id="tree-source" style="height: 300px;" class="tree-source border border-primary"></div>
+        </div>
+        <div class="col">
+            <div id="tree-target" class="tree-target border border-success"></div>
+        </div>
+    </div>
+
+</box>
+
+@functions{
+    
+}
+
+@section Scripts{
+    <script>
+        var dataset = [{
+            "value": "Books",
+            "id": "books",
+            "opened": true,
+            "items": [{
+                "value": "History",
+                "id": "history",
+                "items": [{
+                    "value": "John Mack Faragher",
+                    "id": "jmf"
+                },
+                {
+                    "value": "Jim Dwyer",
+                    "id": "jd"
+                },
+                {
+                    "value": "Larry Schweikart",
+                    "id": "ls"
+                }
+                ]
+            },
+            {
+                "value": "Fiction & Fantasy",
+                "id": "fantasy",
+                "items": [{
+                    "value": "Audrey Niffenegger",
+                    "id": "af"
+                },
+                {
+                    "value": "Philip Roth",
+                    "id": "pr"
+                }
+                ]
+            },
+            {
+                "value": "Teens",
+                "id": "teens",
+                "items": [{
+                    "value": "Joss Whedon",
+                    "id": "jw"
+                },
+                {
+                    "value": "Meg Cabot",
+                    "id": "mc"
+                },
+                {
+                    "value": "Garth Nix",
+                    "id": "gn"
+                }
+                ]
+            }
+            ]
+        }];
+
+        var dataset1 = [{
+            "value": "Books",
+            "id": "books",
+            "opened": true,
+            "items": [{
+                "value": "History",
+                "id": "history",
+                "items": [{
+                    "value": "John Mack Faragher",
+                    "id": "jmf"
+                },
+                {
+                    "value": "Jim Dwyer",
+                    "id": "jd"
+                },
+                {
+                    "value": "Larry Schweikart",
+                    "id": "ls"
+                }
+                ]
+            },
+            {
+                "value": "Fiction & Fantasy",
+                "id": "fantasy",
+                "items": [{
+                    "value": "Audrey Niffenegger",
+                    "id": "af"
+                },
+                {
+                    "value": "Philip Roth",
+                    "id": "pr"
+                }
+                ]
+            },
+            {
+                "value": "Teens",
+                "id": "teens",
+                "items": [{
+                    "value": "Joss Whedon",
+                    "id": "jw"
+                },
+                {
+                    "value": "Meg Cabot",
+                    "id": "mc"
+                },
+                {
+                    "value": "Garth Nix",
+                    "id": "gn"
+                }
+                ]
+            }
+            ]
+        }];
+
+        var source = new dhx.Tree("tree-source", {
+            dragMode: "both",
+            dropBehaviour: "complex",
+            //dragCopy: true
+        });
+        var target = new dhx.Tree("tree-target", {
+            dragMode: "both",
+            dropBehaviour: "complex",
+            //dragCopy: true
+        });
+        source.data.load("/Movie/Admin/TypesManager?handler=LoadTypes");
+        target.data.load("/Movie/Admin/TypesManager?handler=LoadTypes1");
+        //source.data.parse(dataset);
+        //target.data.parse(dataset1);
+
+        source.openAll();
+        target.openAll();
+
+
+        function func() {
+            var state = source.data.serialize();
+            console.log(state)
+        }
+    </script>
+}
